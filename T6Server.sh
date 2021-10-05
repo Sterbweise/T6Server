@@ -1,6 +1,5 @@
 # Shell Script for Linux Server T6 Plutonium
 
-
 #!/bin/bash
 _script="$(readlink -f ${BASH_SOURCE[0]})" 
 # Delete last component from $_script
