@@ -2,7 +2,7 @@
 ![alt text](https://img.shields.io/badge/Debian-10-red?logo=Debian)
 ![alt text](https://img.shields.io/badge/Plutonium-T6-blue)
 
-<img src="https://imgur.com/bBrx8Hf.png" alt="drawing" width="350"/>
+<img src="https://imgur.com/bBrx8Hf.png" alt="drawing" width="300"/>
 <img src="https://i.imgur.com/TdpsBgH.png" alt="drawing" width="200"/>
 
 # T6Server
