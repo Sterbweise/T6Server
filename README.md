@@ -1,47 +1,32 @@
-# LinuxT6Server
-All files needed for a simple installation and configuration of a T6 server on linux (Debian 10)
-![alt text](https://img.shields.io/badge/python-3-blue?logo=python)
-![alt text](https://img.shields.io/badge/pypi%20package-22.0.4-green)
 
-<img src="https://www.uca.fr/medias/photo/logo-uca-long-300dpi_1493730258077-png" alt="drawing" width="350"/>
-<img src="https://stid.iut-clermont.fr/wp-content/uploads/sites/11/2019/04/Logo-Normal-700x381.png" alt="drawing" width="130"/>
+![alt text](https://img.shields.io/badge/Debian-10-red?logo=Debian)
+![alt text](https://img.shields.io/badge/Plutonium-T6-blue)
 
-# IRC Project
-**L'Objectif été de créer un Serveur et un Client IRC**
+<img src="https://imgur.com/bBrx8Hf.png" alt="drawing" width="350"/>
+<img src="https://i.imgur.com/TdpsBgH.png" alt="drawing" width="200"/>
+
+# T6Server
+All files needed for a simple installation and configuration of a T6 server on linux.
 
 ## Installation
-1. Télécharger les fichiers présents sur le gits : <pre>git clone https://gitlab.iut-clermont.uca.fr/kichandeze/IRC-Project.git</pre>
-2. Déplacez-vous dans le Dossier `IRC Project`.
-3. Lancer le Script Python `Server.py` pour démarrer le serveur.<br>
-   <pre>python3 server.py</pre>
-   _Toutefois si vous êtes sur **Linux**, il peut arriver que le fichier ne soit pas executable._<br> <pre>sudo chmod +x server.py
-   python3 server.py</pre>
-4. Ensuite lancer un ou plusieurs clients.
-    <pre>python3 client.py</pre>
-   _Rentrer votre pseudo et le client va se connecter automatiquement au serveur._
-   <br><br>
-5. **Testez**
+1. Download files : <pre>git clone https://github.com/Minami-xan/T6Server.git</pre>
+2. Move to `T6Server` Folder. <pre>cd ~/T6Server/</pre>
+3. Run the Installation Script `install.sh` . <pre>sudo bash install.sh</pre>
+**Installation Complete**
 
-## Commandes
-<pre>
-Commandes Principales du Serveur
+## Configuration
+1. Move to `Plutonium` Folder. <pre>cd ~/T6Server/Plutonium/</pre>
+2. Edit `T6Server.sh` with your information. <pre>nano T6Server.sh</pre>
+3. Allow server port. <pre>sudo bash ~/T6Server/Configuration/allow_port.sh</pre>
+**Configuration Complete**
 
-    !info : Obtenir les informations du serveur.
-    !ping : Testez votre connection.
-    !whoami : Obtenir vos information de connection.
-    !online : Nombre de client connecter.
-    !channel [-option] [channel] : Commande channel
-    !nickname: Pour Changer de Pseudo.
-</pre>
+## Launch Server
+1. Launch Server. <pre>sudo bash ~/T6Server/Plutonium/T6Server.sh</pre>
+   I advise you to use `tmux` or `screen` to open and manage multiple servers.
 
-<pre>
-Commandes de Gestions de Salon
 
-    -create : Crée un channel.
-    Exemple: !channel -create [Nom] [Mot de Passe] [Nombre d'utilisateurs Max]
-    
-    -join : Pour rejoindre un channel.
-    -list : Liste des Channels
-    -info : Pour obtenir les information du channel.
-    -delete : Supprimer le channel (Owner Uniquement).
-</pre>
+## Source
+• **Topic by me:** https://forum.plutonium.pw/topic/12870/guide-debian-t6-server-on-linux-vps-dedicated-server <br>
+• **Plutonium:** https://plutonium.pw <br>
+• **IW4MAdmin by RaidMax:** https://github.com/RaidMax/IW4M-Admin <br>
+• **Plutonium-Updater by mxbe:** https://github.com/mxve/plutonium-updater.rs <br>

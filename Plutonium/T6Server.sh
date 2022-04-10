@@ -1,4 +1,5 @@
 #!/bin/bash
+## Variable Region
 _script="$(readlink -f ${BASH_SOURCE[0]})" 
 # Delete last component from $_script
 _mydir="$(dirname $_script)"
@@ -14,13 +15,17 @@ CFG=dedicated.cfg
 PORT=4976
 # Game Mode ( Multiplayer / Zombie ) -> ( t6mp / t6zm )
 MODE=t6mp
+## End Region
+
+## Update Region (Not Stable)
 # Plutonium game dir
-INSTALLDIR=~/T6_Server/Plutonium
+#INSTALLDIR=~/T6_Server/Plutonium
 
 # Update your server game file
-./plutonium-updater.exe -d "$INSTALLDIR"
+#./plutonium-updater.exe -d "$INSTALLDIR"
+## End Region
 
-# Server Start Region
+## Server Start Region
 echo -e '\033]2;'Plutonium - $NAME - Server restart'\007'
 echo "Visit plutonium.pw | Join the Discord (plutonium) for NEWS and Updates!"
 echo "Server "$NAME" will load $CFG and listen on port $PORT UDP!"
@@ -35,3 +40,4 @@ printf -v NOW '%(%F_%H:%M:%S)T' -1
 echo ""$NOW" WARNING: $NAME server closed or dropped... server restarting."
 sleep 1
 done
+## End Region

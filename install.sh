@@ -3,7 +3,6 @@
 ## Update Region
 echo "Update repository and Upgrade software..."
 apt update && apt upgrade -y
-apt install wget
 ## End Region
 
 ## Firewall Region
@@ -28,7 +27,7 @@ apt-key add winehq.key && \
 apt-add-repository 'deb https://dl.winehq.org/wine-builds/debian/ buster main'
 rm winehq.key
 apt update -y
-apt install --install-recommends winehq-stable
+apt install --install-recommends winehq-stable -y
 
 # Add Variables to the environment at the end of ~/.bashrc
 echo -e 'export WINEPREFIX=~/.wine\nexport WINEDEBUG=fixme-all\nexport WINEARCH=win64' >> ~/.bashrc
@@ -63,8 +62,8 @@ apt-get update; \
 
 
 ## Create Shortcut
-ln -s /zone /Server/Zombie/zone
-ln -s /zone /Server/Multiplayer/zone
+ln -s ~/T6Server/Server/zone ~/T6Server/Server/Zombie/zone
+ln -s ~/T6Server/Server/zone ~/T6Server/Server/Multiplayer/zone
 
-chmod +x /Plutonium/T6Server.sh
+chmod +x ~/T6Server/Plutonium/T6Server.sh
 echo "Installation Complete"
