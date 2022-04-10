@@ -24,7 +24,8 @@ apt-get install wget gnupg2 software-properties-common apt-transport-https -y
 ## Wine Region
 echo "Installing Wine..."
 wget -nc https://dl.winehq.org/wine-builds/winehq.key
-apt-key add winehq.key
+apt-key add winehq.key && \
+apt-add-repository 'deb https://dl.winehq.org/wine-builds/debian/ buster main'
 rm winehq.key
 apt install --install-recommends winehq-stable
 
