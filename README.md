@@ -2,8 +2,7 @@
 ![alt text](https://img.shields.io/badge/Debian-10-red?logo=Debian)
 ![alt text](https://img.shields.io/badge/Plutonium-T6-blue)
 
-<img src="https://imgur.com/bBrx8Hf.png" alt="drawing" width="250"/>
-<img src="https://i.imgur.com/TdpsBgH.png" alt="drawing" width="200"/>
+<img src="https://imgur.com/bBrx8Hf.png" alt="drawing" width="100"/> <img src="https://i.imgur.com/TdpsBgH.png" alt="drawing" width="100"/>
 
 # T6Server
 All files needed for a simple installation and configuration of a T6 server on linux.
