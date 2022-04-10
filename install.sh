@@ -27,6 +27,7 @@ wget -nc https://dl.winehq.org/wine-builds/winehq.key
 apt-key add winehq.key && \
 apt-add-repository 'deb https://dl.winehq.org/wine-builds/debian/ buster main'
 rm winehq.key
+apt update -y
 apt install --install-recommends winehq-stable
 
 # Add Variables to the environment at the end of ~/.bashrc
@@ -62,8 +63,8 @@ apt-get update; \
 
 
 ## Create Shortcut
-ln -s ~/T6_Server/Server/zone ~/T6_Server/Server/Zombie/zone
-ln -s ~/T6_Server/Server/zone ~/T6_Server/Server/Multiplayer/zone
+ln -s /zone /Server/Zombie/zone
+ln -s /zone /Server/Multiplayer/zone
 
-chmod +x ~/T6_Server/Plutonium/T6Server.sh
+chmod +x /Plutonium/T6Server.sh
 echo "Installation Complete"
