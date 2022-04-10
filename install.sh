@@ -22,6 +22,7 @@ dpkg --add-architecture i386
 echo "Installing Wine..."
 wget -nc https://dl.winehq.org/wine-builds/winehq.key
 apt-key add winehq.key
+rm winehq.key
 apt install --install-recommends winehq-stable
 
 # Add Variables to the environment at the end of ~/.bashrc
