@@ -2,7 +2,8 @@
 
 ## Update Region
 echo "Update repository and Upgrade software..."
-apt-get update && apt-get upgrade -y
+apt update && apt upgrade -y
+apt install wget
 ## End Region
 
 ## Firewall Region
@@ -16,7 +17,9 @@ ufw enable
 
 # Enable 32 bit packages
 echo "Enable 32 bit packages..."
-dpkg --add-architecture i386
+dpkg --add-architecture i386 && \
+apt-get update && \
+apt-get install wget gnupg2 software-properties-common apt-transport-https -y
 
 ## Wine Region
 echo "Installing Wine..."
