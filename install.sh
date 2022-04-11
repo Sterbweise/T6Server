@@ -44,7 +44,7 @@ winecfg
 echo "Installing Pre-Required for IW4MAdmin..."
 #Installation .NET Core 3.1
 wget https://packages.microsoft.com/config/debian/10/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
-dpkg -i packages-microsoft-prod.deb
+sudo dpkg -i packages-microsoft-prod.deb
 rm packages-microsoft-prod.deb
 
 #Install the SDK
@@ -52,12 +52,14 @@ rm packages-microsoft-prod.deb
 
 apt-get update; \
 	apt-get install -y dotnet-sdk-3.1
+	apt-get install -y dotnet-sdk-6.0
 
 #Install the runtime
 #The ASP.NET Core Runtime allows you to run apps that were made with .NET that didn't provide the runtime. The following commands install the ASP.NET Core Runtime, which is the most compatible runtime for .NET. In your terminal, run the following commands:
 
 apt-get update; \
 	apt-get install -y aspnetcore-runtime-3.1
+	apt-get install -y aspnetcore-runtime-6.0
 
 ## End Region
 
