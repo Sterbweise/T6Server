@@ -1,4 +1,4 @@
-<script src='https://wzrd.in/standalone/copy-button@latest'></script>
+
 ![alt text](https://img.shields.io/badge/Debian-10-red?logo=Debian)
 ![alt text](https://img.shields.io/badge/Plutonium-T6-blue)
 
