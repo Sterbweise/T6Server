@@ -36,6 +36,7 @@ echo -e 'export WINEPREFIX=~/.wine\nexport WINEDEBUG=fixme-all\nexport WINEARCH=
 source ~/.bashrc
 
 # Configure our wine environment
+DISPLAY=:0 wine ...
 winecfg
 ## End Region
 
@@ -60,9 +61,4 @@ apt-get update; \
 
 ## End Region
 
-## Create Shortcut
-ln -s ~/T6Server/Server/zone ~/T6Server/Server/Zombie/zone
-ln -s ~/T6Server/Server/zone ~/T6Server/Server/Multiplayer/zone
-
-chmod +x ~/T6Server/Plutonium/T6Server.sh
 echo "Installation Complete"
