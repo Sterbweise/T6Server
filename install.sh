@@ -60,7 +60,6 @@ apt-get update; \
 
 ## End Region
 
-
 ## Create Shortcut
 ln -s ~/T6Server/Server/zone ~/T6Server/Server/Zombie/zone
 ln -s ~/T6Server/Server/zone ~/T6Server/Server/Multiplayer/zone

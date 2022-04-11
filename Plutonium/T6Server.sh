@@ -6,7 +6,7 @@ _mydir="$(dirname $_script)"
 # Name of the server shown in the title of the terminal window
 NAME="SERVER_NAME"
 # Your Game Path (where there is binkw32.dll)
-PAT=~/T6_Server/Server/Multiplayer
+PAT=~/T6Server/Server/Multiplayer
 # Paste the server key from https://platform.plutonium.pw/serverkeys
 KEY="YOURKEY"
 # Name of the config file the server should use. (default: dedicated.cfg)
