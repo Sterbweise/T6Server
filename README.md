@@ -23,7 +23,8 @@ ln -s ~/T6Server/Server/zone ~/T6Server/Server/Multiplayer/zone</pre>
 **Configuration Complete**
 
 ## Launch Server
-1. Launch Server. <pre>sudo bash ~/T6Server/Plutonium/T6Server.sh</pre>
+1. Move to `Plutonium` Folder. <pre>cd ~/T6Server/Plutonium</pre>
+2. Launch Server. <pre>./T6Server.sh</pre>
    I advise you to use `tmux` or `screen` to open and manage multiple servers.
 
 
