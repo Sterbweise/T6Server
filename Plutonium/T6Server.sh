@@ -17,12 +17,12 @@ PORT=4976
 MODE=t6mp
 ## End Region
 
-## Update Region (Not Stable)
+## Update Region
 # Plutonium game dir
-#INSTALLDIR=~/T6_Server/Plutonium
+INSTALLDIR=~/T6_Server/Plutonium
 
 # Update your server game file
-#./plutonium-updater.exe -d "$INSTALLDIR"
+./plutonium-updater.exe -d "$INSTALLDIR"
 ## End Region
 
 ## Server Start Region

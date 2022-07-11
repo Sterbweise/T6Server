@@ -11,9 +11,12 @@ All files needed for a simple installation and configuration of a T6 server on l
 1. Download files : <pre>git clone https://github.com/Minami-xan/T6Server.git </pre>
 2. Move to `T6Server` Folder. <pre>cd ~/T6Server/</pre>
 3. Run the Installation Script `install.sh` . <pre>sudo bash install.sh</pre>
-4. Create shortcut for `zone` file. <pre>ln -s ~/T6Server/Server/zone ~/T6Server/Server/Zombie/zone
-ln -s ~/T6Server/Server/zone ~/T6Server/Server/Multiplayer/zone</pre>
-5. Make file executable `T6Server.sh`. <pre>chmod +x ~/T6Server/Plutonium/T6Server.sh</pre>
+4. Create shortcut for `zone` file. 
+   ```shell
+   ln -s ~/T6Server/Server/zone ~/T6Server/Server/Zombie/zone
+   ln -s ~/T6Server/Server/zone ~/T6Server/Server/Multiplayer/zone
+   ```
+7. Make file executable `T6Server.sh`. <pre>chmod +x ~/T6Server/Plutonium/T6Server.sh</pre>
 **Installation Complete**
 
 ## Configuration
