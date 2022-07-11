@@ -35,7 +35,7 @@ echo ""$NOW" $NAME server started."
 
 while true
 do
-wine .\\bin\\plutonium-bootstrapper-win32.exe $MODE $PAT -dedicated +start_map_rotate +set key $KEY +set net_port $PORT +set sv_config $CFG
+wine .\\bin\\plutonium-bootstrapper-win32.exe $MODE $PAT -dedicated +start_map_rotate +set key $KEY +set net_port $PORT +set sv_config $CFG 2> /dev/null
 printf -v NOW '%(%F_%H:%M:%S)T' -1
 echo ""$NOW" WARNING: $NAME server closed or dropped... server restarting."
 sleep 1
