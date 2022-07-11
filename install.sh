@@ -71,7 +71,7 @@ apt-get update; \
 
 echo "[6/7] Game Binary Installation"
 {
-cd ~/T6Server/Plutonium
+cd ~/T6Server/Plutonium/
 wget https://github.com/mxve/plutonium-updater.rs/releases/latest/download/plutonium-updater-x86_64-unknown-linux-gnu.tar.gz
 tar xfv plutonium-updater-x86_64-unknown-linux-gnu.tar.gz
 rm plutonium-updater-x86_64-unknown-linux-gnu.tar.gz
