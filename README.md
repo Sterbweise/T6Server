@@ -16,8 +16,13 @@ All files needed for a simple installation and configuration of a T6 server on l
    ln -s ~/T6Server/Server/zone ~/T6Server/Server/Zombie/zone
    ln -s ~/T6Server/Server/zone ~/T6Server/Server/Multiplayer/zone
    ```
-7. Make file executable `T6Server.sh`. <pre>chmod +x ~/T6Server/Plutonium/T6Server.sh</pre>
-**Installation Complete**
+5. Move updater in Plutonium dir
+   ```shell
+   mv ~/T6Server/plutonium-updater ~/T6Server/Plutonium/
+   ```
+6. Make file executable `T6Server.sh`. <pre>chmod +x ~/T6Server/Plutonium/T6Server.sh</pre>
+
+7. **Installation Complete**
 
 ## Configuration
 1. Move to `Plutonium` Folder. <pre>cd ~/T6Server/Plutonium/</pre>
