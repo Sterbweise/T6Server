@@ -19,10 +19,10 @@ MODE=t6mp
 
 ## Update Region
 # Plutonium game dir
-INSTALLDIR=~/T6_Server/Plutonium
+INSTALLDIR=~/T6Server/Plutonium
 
 # Update your server game file
-./plutonium-updater.exe -d "$INSTALLDIR"
+./plutonium-updater -d "$INSTALLDIR"
 ## End Region
 
 ## Server Start Region

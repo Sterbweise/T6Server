@@ -76,8 +76,6 @@ wget https://github.com/mxve/plutonium-updater.rs/releases/latest/download/pluto
 tar xfv plutonium-updater-x86_64-unknown-linux-gnu.tar.gz
 rm plutonium-updater-x86_64-unknown-linux-gnu.tar.gz
 chmod +x plutonium-updater
-} > /dev/null 
+} > /dev/null
 
-{
 echo "[7/7] Installation Complete"
-} > /dev/null 
