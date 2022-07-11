@@ -22,7 +22,7 @@ All files needed for a simple installation and configuration of a T6 server on l
 ## Configuration
 1. Move to `Plutonium` Folder. <pre>cd ~/T6Server/Plutonium/</pre>
 2. Edit `T6Server.sh` with your information. <pre>nano T6Server.sh</pre>
-3. Allow server port. <pre>sudo bash ~/T6Server/Configuration/allow_port.sh</pre>
+3. Allow server port. <pre>sudo bash ~/T6Server/Scripts/allow_port.sh</pre>
 **Configuration Complete**
 
 ## Launch Server
