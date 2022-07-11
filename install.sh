@@ -9,7 +9,7 @@ apt update && apt upgrade -y
 ## Firewall Region
 echo "[2/7] Install firewall and allow 22 port..."
 {
-apt install -y ufw fail2ban && \
+apt install ufw fail2ban -y && \
 ufw allow 22/tcp && \
 ufw default allow outgoing && \
 ufw default deny incoming && \
@@ -38,9 +38,7 @@ apt install --install-recommends winehq-stable -y
 # Add Variables to the environment at the end of ~/.bashrc
 echo -e 'export WINEPREFIX=~/.wine\nexport WINEDEBUG=fixme-all\nexport WINEARCH=win64' >> ~/.bashrc
 echo -e 'export DISPLAY=:0' >> ~/.bashrc
-
 source ~/.bashrc
-
 winecfg
 } > /dev/null 2>&1
 ## End Region
