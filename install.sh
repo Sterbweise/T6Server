@@ -13,7 +13,7 @@ apt install ufw fail2ban -y && \
 ufw allow 22/tcp && \
 ufw default allow outgoing && \
 ufw default deny incoming && \
-ufw enable
+ufw -f enable
 } > /dev/null 2>&1
 ## End Region
 
