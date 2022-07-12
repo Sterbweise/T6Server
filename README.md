@@ -8,6 +8,8 @@
 All files needed for a simple installation and configuration of a T6 server on linux.
 
 ## Installation
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/lwxOAc2gzIk" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 1. Download files : <pre>git clone https://github.com/Minami-xan/T6Server.git </pre>
 2. Move to `T6Server` Folder. <pre>cd ~/T6Server/</pre>
 3. Run the Installation Script `install.sh` . <pre>sudo bash install.sh</pre>
