@@ -32,9 +32,12 @@ All files needed for a simple installation and configuration of a T6 server on D
    I advise you to use `tmux` or `screen` to open and manage multiple servers.
 
 ## Issues
+### Wine display errors
+   + Don't care of these errors, plutonium server doesn't have graphic support.
+
 ### Unable to load import '_BinkWaitStopAsyncThread@4' from module 'binkw32.dll'
-+ Check your PAT variable in ./T6Server.sh. (It will be ping binkw32.dll dir)
-+ Make sure to your user can read the file in all sub-dir of T6Server.
+   + Check your PAT variable in ./T6Server.sh. (It will be ping binkw32.dll dir)
+   + Make sure to your user can read the file in all sub-dir of T6Server.
 
 ### Server don't appear in Plutonium Servers List
    + Check if your server port is open with UDP protocol. (Example: 4976)
