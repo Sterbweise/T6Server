@@ -173,9 +173,63 @@ install_wine() {
 
 install_game_binaries() {
     {
+
+        # Download T6ServerConfigs repository
+        git clone https://github.com/xerxes-at/T6ServerConfigs.git /tmp/T6ServerConfigs
+
+        # Create necessary directories
+        mkdir -p "$WORKDIR/Server/Multiplayer/main" \
+                 "$WORKDIR/Server/Multiplayer/t6r/data/gamesettings" \
+                 "$WORKDIR/Server/Zombie/main" \
+                 "$WORKDIR/Server/Zombie/t6r/data/gamesettings"
+
+        # Move default gamesettings files for Zombie and Multiplayer modes
+        if [ -d "/tmp/T6ServerConfigs/localappdata/Plutonium/storage/t6/gamesettings/gamesettings_defaults (REFERENCE ONLY)" ]; then
+            # For Zombie mode
+            if [ -d "/tmp/T6ServerConfigs/localappdata/Plutonium/storage/t6/gamesettings/gamesettings_defaults (REFERENCE ONLY)/ZM" ]; then
+                mkdir -p "$WORKDIR/Server/Zombie/t6r/data/gamesettings/default"
+                cp -r "/tmp/T6ServerConfigs/localappdata/Plutonium/storage/t6/gamesettings/gamesettings_defaults (REFERENCE ONLY)/ZM"/* "$WORKDIR/Server/Zombie/gamesettings/default/"
+            fi
+
+            # For Multiplayer mode
+            if [ -d "/tmp/T6ServerConfigs/localappdata/Plutonium/storage/t6/gamesettings/gamesettings_defaults (REFERENCE ONLY)/MP" ]; then
+                mkdir -p "$WORKDIR/Server/Multiplayer/t6r/data/gamesettings/default"
+                cp -r "/tmp/T6ServerConfigs/localappdata/Plutonium/storage/t6/gamesettings/gamesettings_defaults (REFERENCE ONLY)/MP"/* "$WORKDIR/Server/Multiplayer/gamesettings/default/"
+            fi
+        fi
+
+        # Copy files to their respective locations
+        # Copy dedicated.cfg to Multiplayer main directory
+        cp /tmp/T6ServerConfigs/localappdata/Plutonium/storage/t6/dedicated.cfg "$WORKDIR/Server/Multiplayer/main/"
+        cp /tmp/T6ServerConfigs/localappdata/Plutonium/storage/t6/restricted.cfg "$WORKDIR/Server/Multiplayer/t6r/data/"
+        cp /tmp/T6ServerConfigs/localappdata/Plutonium/storage/t6/dedicated_zm.cfg "$WORKDIR/Server/Zombie/main/"
+        
+        # Copy MP recipes to Multiplayer t6r/data directory
+        if [ -d "/tmp/T6ServerConfigs/localappdata/Plutonium/storage/t6/recipes/mp" ]; then
+            mkdir -p "$WORKDIR/Server/Multiplayer/t6r/data/recipes"
+            cp -r "/tmp/T6ServerConfigs/localappdata/Plutonium/storage/t6/recipes/mp" "$WORKDIR/Server/Multiplayer/t6r/data/recipes/"
+        fi
+        # Copy gamesettings files to their respective locations
+        for file in /tmp/T6ServerConfigs/localappdata/Plutonium/storage/t6/gamesettings/*; do
+            if [[ $(basename "$file") == zm_* ]]; then
+                cp "$file" "$WORKDIR/Server/Zombie/t6r/data/gamesettings/"
+            else
+                cp "$file" "$WORKDIR/Server/Multiplayer/t6r/data/gamesettings/"
+            fi
+        done
+
+        # Clean up
+        rm -rf /tmp/T6ServerConfigs
+        
         # Create symbolic links
-        ln -s "$WORKDIR/Server/zone" "$WORKDIR/Server/Zombie/zone"
-        ln -s "$WORKDIR/Server/zone" "$WORKDIR/Server/Multiplayer/zone"
+        ln -s "$WORKDIR/Ressources/.sources/binkw32.dll" "$WORKDIR/Server/Zombie"
+        ln -s "$WORKDIR/Ressources/.sources/codlogo.bmp" "$WORKDIR/Server/Zombie"
+
+        ln -s "$WORKDIR/Ressources/.sources/binkw32.dll" "$WORKDIR/Server/Multiplayer"
+        ln -s "$WORKDIR/Ressources/.sources/codlogo.bmp" "$WORKDIR/Server/Multiplayer"
+
+        ln -s "$WORKDIR/Ressources/.sources/zone" "$WORKDIR/Server/Zombie/zone"
+        ln -s "$WORKDIR/Ressources/.sources/zone" "$WORKDIR/Server/Multiplayer/zone"
 
         # Download and extract plutonium-updater
         cd "$WORKDIR/Plutonium/" || exit
@@ -288,5 +342,7 @@ ask_installations() {
 finish_installation() {
     printf "\n${GREEN}$(get_message "finish")${NC}\n"
     printf "\n$(get_message "quit")"
-    read
+    read -n 1 -s -r -p ""
+    echo
+    exit 0
 }

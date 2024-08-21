@@ -48,9 +48,7 @@ fi
 install_game_binaries
 
 # Display installation completion message
-printf "\n${GREEN}$(get_message "finish")${NC}\n"
-printf "\n$(get_message "quit")"
-read
+finish_installation
 
 # Reset terminal settings and exit
 stty -igncr
