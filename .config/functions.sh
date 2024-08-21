@@ -201,13 +201,12 @@ install_wine() {
         
         # Add Wine repository based on Debian version
         if [ "$VERSION" = "11" ] || [ "$VERSION" = "10" ]; then
-            echo "deb https://dl.winehq.org/wine-builds/debian/ bullseye main" | tee /etc/apt/sources.list.d/wine.list > /dev/null
-        elif [ "$$VERSION" = "12" ]; then
-            apt-add-repository 'deb https://dl.winehq.org/wine-builds/debian/ bookworm main'
+            echo "deb https://dl.winehq.org/wine-builds/debian/ bullseye main" | tee -a /etc/apt/sources.list.d/wine.list > /dev/null
+        elif [ "$VERSION" = "12" ]; then
+            echo "deb https://dl.winehq.org/wine-builds/debian/ bookworm main" | tee -a /etc/apt/sources.list.d/wine.list > /dev/null
         else
-            apt-add-repository 'deb https://dl.winehq.org/wine-builds/debian/ bullseye main'
+            echo "deb https://dl.winehq.org/wine-builds/debian/ bullseye main" | tee -a /etc/apt/sources.list.d/wine.list > /dev/null
         fi
-        
         # Update package list and install Wine
         apt update -y
         apt install --install-recommends winehq-stable -y
