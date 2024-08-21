@@ -1,9 +1,9 @@
 #!/bin/bash
 
-# Source configuration and functions
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)"
-source "$SCRIPT_DIR/config.sh"
-source "$SCRIPT_DIR/functions.sh"
+# Source configuration and function files
+DEFAULT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)"
+source "$DEFAULT_DIR/.config/config.sh"
+source "$DEFAULT_DIR/.config/functions.sh"
 
 # Check for sudo permissions
 if [[ $UID != 0 ]]; then
@@ -36,9 +36,7 @@ remove_firewall
 spinner "$(get_message "cleanup")"
 
 # Display completion message
-printf "\n${GREEN}$(get_message "uninstall_finish")${NC}\n"
-printf "\n$(get_message "quit")"
-read
+finish_installation
 
 # Reset terminal settings and exit
 stty -igncr
