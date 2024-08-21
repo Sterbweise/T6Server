@@ -77,12 +77,20 @@ update_system() {
 }
 
 confirm_uninstall() {
-    printf "${RED}$(get_message "confirm_uninstall")${NC}\n"
-    read -p "$(get_message "confirm_prompt") " confirm
-    if [[ ! "$confirm" =~ ^[yYoO]$ ]]; then
-        printf "${YELLOW}$(get_message "uninstall_cancelled")${NC}\n"
-        exit 0
-    fi
+    while true; do
+        printf "${RED}$(get_message "confirm_uninstall")${NC}\n"
+        printf "$(get_message "confirm_prompt") "
+        read -n 1 -r confirm
+        echo  # Pour aller à la ligne après l'entrée
+        if [[ "$confirm" =~ ^[yYoO]$ ]]; then
+            break
+        elif [[ "$confirm" =~ ^[nN]$ ]]; then
+            printf "${YELLOW}$(get_message "uninstall_cancelled")${NC}\n"
+            exit 0
+        else
+            echo "Invalid input. Please enter Y/y/O/o for Yes, or N/n for No."
+        fi
+    done
 }
 
 ## INSTALLATION FUNCTIONS

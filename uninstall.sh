@@ -17,7 +17,7 @@ clear_and_show_logo
 
 # Language selection
 select_language
-clearclear_and_show_logo
+clear_and_show_logo
 
 # Confirm uninstallation
 confirm_uninstall
