@@ -350,7 +350,7 @@ ask_installations() {
 finish_installation() {
     printf "\n${GREEN}$(get_message "finish")${NC}\n"
     printf "\n$(get_message "quit")"
-    read -n 1 -s -r -p ""
+    read -r
     echo
     exit 0
 }
