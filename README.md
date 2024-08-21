@@ -1,4 +1,4 @@
-# T6 Server - Plutonium Black Ops II Server Management Suite
+# T6 Server - Plutonium Black Ops II Server Installer
 
 ![Version](https://img.shields.io/badge/Version-2.1.0-blue)
 ![Debian](https://img.shields.io/badge/Debian-10%20%7C%2011%20%7C%2012-brightgreen?logo=Debian)
