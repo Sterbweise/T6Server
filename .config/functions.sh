@@ -3,6 +3,7 @@
 # Include all your existing functions here
 # Remember to update paths using $WORKDIR
 
+# Function to display the logo
 logo() {
     printf "${RED}
   _______ __     _____                            _____           _        _ _           
@@ -19,6 +20,7 @@ logo() {
                          ╚══════════════════════════════╝\n\n"
 }
 
+# Function to display a spinner while a process is running
 spinner() { 
     pid=$!
     spin='-\|/'
@@ -32,18 +34,21 @@ spinner() {
     printf "\r [${GREEN}\xE2\x9C\x94${NC}] $1\n"
 }
 
+# Function to get a message in the selected language
 get_message() {
     local key="${1}_en"
     [[ $language -eq 1 ]] && key="${1}_fr"
     echo "${!key}"
 }
 
+# Function to clear the screen and show the logo
 clear_and_show_logo() {
     stty igncr
     clear
     logo
 }
 
+# Function to select the language
 select_language() {
     while true; do
         printf "${YELLOW}$(get_message "select_language")${NC}\n"
@@ -51,7 +56,7 @@ select_language() {
         printf "[1] French\n\n"
         printf ">>> "
         read -n 1 -r language_input
-        echo  # Pour aller à la ligne après l'entrée
+        echo  # New line after input
         case $language_input in
             0)
                 language=0
@@ -69,6 +74,7 @@ select_language() {
     clear_and_show_logo
 }
 
+# Function to update the system
 update_system() {
     {
         apt update
@@ -76,12 +82,13 @@ update_system() {
     spinner "$(get_message "update")"
 }
 
+# Function to confirm uninstallation
 confirm_uninstall() {
     while true; do
         printf "${RED}$(get_message "confirm_uninstall")${NC}\n"
         printf "$(get_message "confirm_prompt") "
         read -n 1 -r confirm
-        echo  # Pour aller à la ligne après l'entrée
+        echo  # New line after input
         if [[ "$confirm" =~ ^[yYoO]$ ]]; then
             break
         elif [[ "$confirm" =~ ^[nN]$ ]]; then
@@ -94,6 +101,8 @@ confirm_uninstall() {
 }
 
 ## INSTALLATION FUNCTIONS
+
+# Function to install firewall
 install_firewall() {
     local ssh_port="$1"
     {
@@ -104,6 +113,19 @@ install_firewall() {
         ufw -f enable
     } > /dev/null 2>&1 &
     spinner "$(get_message "firewall_install")"
+    
+    # Verify installation
+    if ! command -v ufw &> /dev/null || ! command -v fail2ban-client &> /dev/null
+    then
+        printf "${RED}Error: Firewall installation failed.${NC}\n"
+        printf "Attempting reinstallation...\n"
+        apt install ufw fail2ban -y
+        if ! command -v ufw &> /dev/null || ! command -v fail2ban-client &> /dev/null
+        then
+            printf "${RED}Error: Reinstallation failed. Please check your internet connection and try again.${NC}\n"
+            exit 1
+        fi
+    fi
 }
 
 # Function to install Dotnet
@@ -123,16 +145,30 @@ install_dotnet() {
         apt-get update
         apt-get install -y dotnet-sdk-3.1 dotnet-sdk-6.0 aspnetcore-runtime-3.1 aspnetcore-runtime-6.0
 
-        # Vérifier l'installation
-        dotnet --version || echo "L'installation de .NET a échoué"
+        # Verify installation
+        dotnet --version || echo "Dotnet installation failed"
 
-        # Nettoyer le cache apt
+        # Clean apt cache
         apt-get clean
         apt-get autoremove -y
     } > /dev/null 2>&1 &
     spinner "$(get_message "dotnet_install")"
+    
+    # Verify installation
+    if ! command -v dotnet &> /dev/null
+    then
+        printf "${RED}Error: Dotnet installation failed.${NC}\n"
+        printf "Attempting reinstallation...\n"
+        apt-get install -y dotnet-sdk-3.1 dotnet-sdk-6.0 aspnetcore-runtime-3.1 aspnetcore-runtime-6.0
+        if ! command -v dotnet &> /dev/null
+        then
+            printf "${RED}Error: Reinstallation failed. Please check your internet connection and try again.${NC}\n"
+            exit 1
+        fi
+    fi
 }
 
+# Function to enable 32-bit packages
 enable_32bit_packages() {
     {
         dpkg --add-architecture i386
@@ -140,8 +176,23 @@ enable_32bit_packages() {
         apt-get install wget gnupg2 software-properties-common apt-transport-https curl -y
     } > /dev/null 2>&1 &
     spinner "$(get_message "bit")"
+    
+    # Verify installation
+    if ! dpkg --print-foreign-architectures | grep -q i386
+    then
+        printf "${RED}Error: 32-bit package activation failed.${NC}\n"
+        printf "Attempting reactivation...\n"
+        dpkg --add-architecture i386
+        apt-get update -y
+        if ! dpkg --print-foreign-architectures | grep -q i386
+        then
+            printf "${RED}Error: Reactivation failed. Please check your system and try again.${NC}\n"
+            exit 1
+        fi
+    fi
 }
 
+# Function to install Wine
 install_wine() {
     {
         # Add Wine repository key
@@ -150,15 +201,12 @@ install_wine() {
         
         # Add Wine repository based on Debian version
         if [ "$VERSION" = "11" ] || [ "$VERSION" = "10" ]; then
-            apt-add-repository 'deb https://dl.winehq.org/wine-builds/debian/ bullseye main'
+            echo "deb https://dl.winehq.org/wine-builds/debian/ bullseye main" | tee /etc/apt/sources.list.d/wine.list > /dev/null
         elif [ "$$VERSION" = "12" ]; then
             apt-add-repository 'deb https://dl.winehq.org/wine-builds/debian/ bookworm main'
         else
             apt-add-repository 'deb https://dl.winehq.org/wine-builds/debian/ bullseye main'
         fi
-        
-        # Remove the key file
-        rm winehq.key
         
         # Update package list and install Wine
         apt update -y
@@ -175,13 +223,29 @@ install_wine() {
         
         # Run Wine configuration
         winecfg
+
+        # Remove the key file
+        rm winehq.key
     } > /dev/null 2>&1 &
     spinner "$(get_message "wine")"
+    
+    # Verify installation
+    if ! command -v wine &> /dev/null
+    then
+        printf "${RED}Error: Wine installation failed.${NC}\n"
+        printf "Attempting reinstallation...\n"
+        apt install --install-recommends winehq-stable -y
+        if ! command -v wine &> /dev/null
+        then
+            printf "${RED}Error: Reinstallation failed. Please check your internet connection and try again.${NC}\n"
+            exit 1
+        fi
+    fi
 }
 
+# Function to install game binaries
 install_game_binaries() {
     {
-
         # Download T6ServerConfigs repository
         git clone https://github.com/xerxes-at/T6ServerConfigs.git /tmp/T6ServerConfigs
 
@@ -250,9 +314,13 @@ install_game_binaries() {
         chmod +x "$WORKDIR/Plutonium/T6Server.sh"
     } > /dev/null 2>&1 &
     spinner "$(get_message "binary")"
+    
+    # Verify installation
 }
 
 ## UNINSTALLATION FUNCTIONS
+
+# Function to uninstall game binaries
 uninstall_game_binaries() {
     {
         rm -rf "$WORKDIR"
