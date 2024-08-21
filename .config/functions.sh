@@ -1,26 +1,44 @@
 #!/bin/bash
 
-# Include all your existing functions here
-# Remember to update paths using $WORKDIR
+# functions.sh - Plutonium Call of Duty: Black Ops II Server Functions
+# Version: 2.1.0
+# Author: Sterbweise
+# Last Updated: 21/08/2024
+
+# Description:
+# This script contains essential functions used by the Plutonium Call of Duty: Black Ops II
+# server installation, management, and uninstallation scripts. It provides utility functions
+# for user interface, system operations, and server-specific tasks.
+
+# Usage:
+# This file is sourced by other scripts and should not be executed directly.
+
+# Note: Ensure this file is in the same directory as the main scripts that use these functions.
 
 # Function to display the logo
+# This function prints a stylized ASCII art logo for the T6 Server Installer
 logo() {
-    printf "${RED}
-  _______ __     _____                            _____           _        _ _           
- |__   __/ /    / ____|                          |_   _|         | |      | | |          
-    | | / /_   | (___   ___ _ ____   _____ _ __    | |  _ __  ___| |_ __ _| | | ___ _ __ 
-    | || '_ \   \___ \ / _ \ '__\ \ / / _ \ '__|   | | | '_ \/ __| __/ _\` | | |/ _ \ '__|
-    | || (_) |  ____) |  __/ |   \ V /  __/ |     _| |_| | | \__ \ || (_| | | |  __/ |   
-    |_| \___/  |_____/ \___|_|    \_/ \___|_|    |_____|_| |_|___/\__\__,_|_|_|\___|_|   
- ${NC}                                                                                        
-                         ╔══════════════════════════════╗
-                         ║      Made by ${BLUE}Sterbweise${NC}      ║
-                         ╠══════════════════════════════╣
-                         ║ ${PURPLE}\e]8;;https://github.com/Sterbweise\e\\Github\e]8;;\e\\\\${NC} | ${RED}\e]8;;https://www.youtube.com/channel/UCRWfp6bi0-wlhaRe2YQ2dwQ\e\\Youtube\e]8;;\e\\\\${NC} | ${GREY}\e]8;;https://forum.plutonium.pw/user/minami\e\\Plutonium\e]8;;\e\\\\${NC} ║
-                         ╚══════════════════════════════╝\n\n"
+    printf "${BLUE}
+    ████████╗ ██████╗      ██████╗ ██████╗ ███████╗██████╗  █████╗ ████████╗ ██████╗ ██████╗ 
+    ╚══██╔══╝██╔          ██╔═══██╗██╔══██╗██╔════╝██╔══██╗██╔══██╗╚══██╔══╝██╔═══██╗██╔══██╗
+       ██║   ██║██║██║    ██║   ██║██████╔╝█████╗  ██████╔╝███████║   ██║   ██║   ██║██████╔╝
+       ██║   ██║   ██║    ██║   ██║██╔═══╝ ██╔══╝  ██╔══██╗██╔══██║   ██║   ██║   ██║██╔══██╗
+       ██║   ╚██████╔╝    ╚██████╔╝██║     ███████╗██║  ██║██║  ██║   ██║   ╚██████╔╝██║  ██║
+       ╚═╝    ╚═════╝      ╚═════╝ ╚═╝     ╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝   ╚═╝    ╚═════╝ ╚═╝  ╚═╝
+    ${NC}
+    ╔════════════════════════════════════════════════════════════════════════════════════════════════════╗
+    ║  ${YELLOW}T6 Operator${NC}                                                                                     ║
+    ║  ${GREEN}Version: 2.1.0${NC}                                                                                   ║
+    ║  ${PURPLE}Author: Sterbweise${NC}                                                                              ║
+    ║  ${GREY}Last Updated: 21/08/2024${NC}                                                                          ║
+    ║  ${CYAN}Plutonium Black Ops II Server Management Suite${NC}                                                    ║
+    ╠════════════════════════════════════════════════════════════════════════════════════════════════════╣
+    ║  ${BLUE}\e]8;;https://github.com/Sterbweise\e\\Github\e]8;;\e\\${NC} | ${RED}\e]8;;https://www.youtube.com/channel/UCRWfp6bi0-wlhaRe2YQ2dwQ\e\\Youtube\e]8;;\e\\${NC} | ${GREY}\e]8;;https://forum.plutonium.pw/user/minami\e\\Plutonium\e]8;;\e\\${NC}  ║
+    ╚════════════════════════════════════════════════════════════════════════════════════════════════════╝\n\n"
 }
 
 # Function to display a spinner while a process is running
+# This provides visual feedback to the user during long-running operations
 spinner() { 
     pid=$!
     spin='-\|/'
@@ -35,6 +53,7 @@ spinner() {
 }
 
 # Function to get a message in the selected language
+# This supports localization of the script's output
 get_message() {
     local key="${1}_en"
     [[ $language -eq 1 ]] && key="${1}_fr"
@@ -42,6 +61,7 @@ get_message() {
 }
 
 # Function to clear the screen and show the logo
+# This improves the user interface by providing a clean, branded display
 clear_and_show_logo() {
     stty igncr
     clear
@@ -49,6 +69,7 @@ clear_and_show_logo() {
 }
 
 # Function to select the language
+# This allows users to choose their preferred language for script messages
 select_language() {
     while true; do
         printf "${YELLOW}$(get_message "select_language")${NC}\n"
@@ -75,6 +96,7 @@ select_language() {
 }
 
 # Function to update the system
+# This ensures the system is up-to-date before proceeding with installations
 update_system() {
     {
         apt update
@@ -83,6 +105,7 @@ update_system() {
 }
 
 # Function to confirm uninstallation
+# This provides a safety check before proceeding with uninstallation
 confirm_uninstall() {
     while true; do
         printf "${RED}$(get_message "confirm_uninstall")${NC}\n"
@@ -103,6 +126,7 @@ confirm_uninstall() {
 ## INSTALLATION FUNCTIONS
 
 # Function to install firewall
+# This sets up UFW and fail2ban for improved server security
 install_firewall() {
     local ssh_port="$1"
     {
@@ -129,6 +153,7 @@ install_firewall() {
 }
 
 # Function to install Dotnet
+# This installs the .NET SDK and runtime required for the server
 install_dotnet() {
     {
         # Try to get the package for the current distribution
@@ -169,6 +194,7 @@ install_dotnet() {
 }
 
 # Function to enable 32-bit packages
+# This is necessary for running 32-bit applications on 64-bit systems
 enable_32bit_packages() {
     {
         dpkg --add-architecture i386
@@ -193,6 +219,7 @@ enable_32bit_packages() {
 }
 
 # Function to install Wine
+# This installs Wine, which is necessary for running Windows applications on Linux
 install_wine() {
     {
         # Add Wine repository key
@@ -243,6 +270,7 @@ install_wine() {
 }
 
 # Function to install game binaries
+# This sets up the necessary files and directories for the Plutonium T6 server
 install_game_binaries() {
     {
         # Download T6ServerConfigs repository
