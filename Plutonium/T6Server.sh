@@ -1,43 +1,41 @@
 #!/bin/bash
-## Variable Region
-_script="$(readlink -f ${BASH_SOURCE[0]})" 
-# Delete last component from $_script
-_mydir="$(dirname $_script)"
-# Name of the server shown in the title of the terminal window
-NAME="SERVER_NAME"
-# Your Game Path (where there is binkw32.dll)
-PAT=~/T6Server/Server/Multiplayer
-# Paste the server key from https://platform.plutonium.pw/serverkeys
-KEY="YOURKEY"
-# Name of the config file the server should use. (default: dedicated.cfg)
-CFG=dedicated.cfg
-# Port used by the server (default: 4976) -> Don't forget to allow server port in ufw fail2ban
-PORT=4976
-# Game Mode ( Multiplayer / Zombie ) -> ( t6mp / t6zm )
-MODE=t6mp
-## End Region
 
-## Update Region
-# Plutonium game dir
-INSTALLDIR=~/T6Server/Plutonium
+# Configuration variables
+readonly SCRIPT_PATH=$(readlink -f "${BASH_SOURCE[0]}")
+readonly SCRIPT_DIR=$(dirname "$SCRIPT_PATH")
+readonly SERVER_NAME="SERVER_NAME"
+readonly GAME_PATH="/opt/T6Server/Server/Multiplayer"
+readonly SERVER_KEY="YOURKEY"
+readonly CONFIG_FILE="dedicated.cfg"
+readonly SERVER_PORT=4976
+readonly GAME_MODE="t6mp"
+readonly INSTALL_DIR="/opt/T6Server/Plutonium"
 
-# Update your server game file
-./plutonium-updater -d "$INSTALLDIR"
-## End Region
+# Update server files
+update_server() {
+    ./plutonium-updater -d "$INSTALL_DIR"
+}
 
-## Server Start Region
-echo -e '\033]2;'Plutonium - $NAME - Server restart'\007'
-echo "Visit plutonium.pw | Join the Discord (plutonium) for NEWS and Updates!"
-echo "Server "$NAME" will load $CFG and listen on port $PORT UDP!"
-echo "To shut down the server close this window first!"
-printf -v NOW '%(%F_%H:%M:%S)T' -1
-echo ""$NOW" $NAME server started."
+# Start server
+start_server() {
+    local timestamp
+    printf -v timestamp '%(%F_%H:%M:%S)T' -1
+    
+    echo -e '\033]2;Plutonium - '"$SERVER_NAME"' - Server restart\007'
+    echo "Visit plutonium.pw | Join the Discord (plutonium) for NEWS and Updates!"
+    echo "Server $SERVER_NAME will load $CONFIG_FILE and listen on port $SERVER_PORT UDP!"
+    echo "To shut down the server close this window first!"
+    echo "$timestamp $SERVER_NAME server started."
 
-while true
-do
-wine .\\bin\\plutonium-bootstrapper-win32.exe $MODE $PAT -dedicated +start_map_rotate +set key $KEY +set net_port $PORT +set sv_config $CFG 2> /dev/null
-printf -v NOW '%(%F_%H:%M:%S)T' -1
-echo ""$NOW" WARNING: $NAME server closed or dropped... server restarting."
-sleep 1
-done
-## End Region
+    while true; do
+        wine .\\bin\\plutonium-bootstrapper-win32.exe "$GAME_MODE" "$GAME_PATH" -dedicated +start_map_rotate +set key "$SERVER_KEY" +set net_port "$SERVER_PORT" +set sv_config "$CONFIG_FILE" 2>/dev/null
+        
+        printf -v timestamp '%(%F_%H:%M:%S)T' -1
+        echo "$timestamp WARNING: $SERVER_NAME server closed or dropped... server restarting."
+        sleep 1
+    done
+}
+
+# Main execution
+update_server
+start_server
