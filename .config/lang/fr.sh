@@ -31,7 +31,7 @@ wine_fr="Installation de Wine."
 dotnet_install_fr="Installation de Dotnet."
 binary_fr="Installation des fichiers binaires."
 finish_fr="Installation terminée."
-quit_fr="Appuyez sur ENTER pour quitter."
+quit_fr="Appuyez sur CTRL+C pour quitter."
 
 # Messages de désinstallation
 # Ces messages sont affichés pendant le processus de désinstallation du serveur

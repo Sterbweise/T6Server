@@ -31,7 +31,7 @@ wine_en="Installing Wine."
 dotnet_install_en="Installing Dotnet."
 binary_en="Game Binary Installation."
 finish_en="Installation finished."
-quit_en="Press ENTER to quit."
+quit_en="Press CTRL+C to quit."
 
 # Uninstallation Messages
 # These messages are displayed during the server uninstallation process

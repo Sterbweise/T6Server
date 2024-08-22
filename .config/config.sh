@@ -39,6 +39,16 @@ PURPLE='\033[0;35m'
 GREEN='\033[0;32m'
 BLUE='\033[0;34m'
 RED='\033[0;31m'
+CYAN='\033[0;36m'
+MAGENTA='\033[0;35m'
+WHITE='\033[1;37m'
+BLACK='\033[0;30m'
+ORANGE='\033[0;33m'
+LIGHT_BLUE='\033[1;34m'
+LIGHT_GREEN='\033[1;32m'
+LIGHT_CYAN='\033[1;36m'
+LIGHT_RED='\033[1;31m'
+LIGHT_PURPLE='\033[1;35m'
 NC='\033[0m'  # No Color (resets color to default)
 
 # Global variables
