@@ -3,7 +3,7 @@
 ![Version](https://img.shields.io/badge/Version-2.1.0-blue)
 ![Debian](https://img.shields.io/badge/Debian-10%20%7C%2011%20%7C%2012-brightgreen?logo=Debian)
 ![Plutonium T6](https://img.shields.io/badge/Plutonium-T6-blue)
-![License](https://img.shields.io/badge/License-GPL-3.0-yellow)
+![License](https://img.shields.io/badge/License-GPL--3.0-yellow)
 ![GitHub repo size](https://img.shields.io/github/repo-size/Sterbweise/T6Server)
 ![GitHub stars](https://img.shields.io/github/stars/Sterbweise/T6Server)
 ![GitHub forks](https://img.shields.io/github/forks/Sterbweise/T6Server)
