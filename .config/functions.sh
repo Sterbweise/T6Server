@@ -232,6 +232,7 @@ install_wine() {
     {
         # Add Wine repository key
         wget -nc https://dl.winehq.org/wine-builds/winehq.key
+        apt-key add winehq.key
         sudo mv winehq.key /etc/apt/trusted.gpg.d/winehq.asc
         
         # Add Wine repository based on Debian version
