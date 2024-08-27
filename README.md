@@ -148,7 +148,7 @@ To configure your server:
 
 1. Open the configuration file:
    ```bash
-   nano /opt/T6Server/T6Server.sh
+   nano /opt/T6Server/Plutonium/T6Server.sh
    ```
 
 2. Modify the variables according to your preferences. For example:
@@ -171,7 +171,7 @@ To launch your Plutonium Call of Duty: Black Ops II server, follow these profess
 
 1. Navigate to the T6Server installation directory:
    ```bash
-   cd /opt/T6Server
+   cd /opt/T6Server/Plutonium
    ```
 
 2. Ensure the start script has the necessary execution permissions:
