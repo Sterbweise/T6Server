@@ -317,23 +317,25 @@ enable_32bit_packages() {
 install_wine() {
     {
         # Add Wine repository key if not already added
-        if ! apt-key list | grep -q "WineHQ"; then
-            wget -nc https://dl.winehq.org/wine-builds/winehq.key
-            apt-key add winehq.key
-            sudo mv winehq.key /etc/apt/trusted.gpg.d/winehq.asc
+        if [ ! -f /etc/apt/keyrings/winehq-archive.key ]; then
+            sudo wget -O /etc/apt/keyrings/winehq-archive.key https://dl.winehq.org/wine-builds/winehq.key
         fi
-        
-        # Add Wine repository based on Debian version if not already added
-        if ! grep -q "https://dl.winehq.org/wine-builds/debian/" /etc/apt/sources.list.d/wine.list; then
-            if [ "$VERSION" = "11" ] || [ "$VERSION" = "10" ]; then
-                echo "deb https://dl.winehq.org/wine-builds/debian/ bullseye main" | tee -a /etc/apt/sources.list.d/wine.list > /dev/null
-            elif [ "$VERSION" = "12" ]; then
-                echo "deb https://dl.winehq.org/wine-builds/debian/ bookworm main" | tee -a /etc/apt/sources.list.d/wine.list > /dev/null
+
+        # Add Wine repository sources based on Debian version
+        SOURCES_FILE="/etc/apt/sources.list.d/winehq.sources"
+        if [ ! -f "$SOURCES_FILE" ]; then
+            if [ "$VERSION" = "12" ]; then
+                SOURCES_URL="https://dl.winehq.org/wine-builds/debian/dists/bookworm/winehq-bookworm.sources"
+            elif [ "$VERSION" = "11" ]; then
+                SOURCES_URL="https://dl.winehq.org/wine-builds/debian/dists/bullseye/winehq-bullseye.sources"
+            elif [ "$VERSION" = "10" ]; then
+                SOURCES_URL="https://dl.winehq.org/wine-builds/debian/dists/buster/winehq-buster.sources"
             else
-                echo "deb https://dl.winehq.org/wine-builds/debian/ bullseye main" | tee -a /etc/apt/sources.list.d/wine.list > /dev/null
+                echo "Unsupported Debian version. Defaulting to Bookworm sources."
+                SOURCES_URL="https://dl.winehq.org/wine-builds/debian/dists/bookworm/winehq-bookworm.sources"
             fi
+            sudo wget -O "$SOURCES_FILE" "$SOURCES_URL"
         fi
-        
         # Update package list and install Wine if not already installed
         if ! dpkg -l | grep -q winehq-stable; then
             apt update -y
@@ -584,7 +586,7 @@ ask_installations() {
     if [[ "$firewall" == "yes" ]]; then
         while true; do
             printf "\n${YELLOW}$(get_message "ssh_port")${NC}\n"
-            printf "${LIGHT_PURPLE}$(get_message "ssh_port_enter")${NC}\n"
+            printf "${LIGHT_RED}$(get_message "ssh_port_enter")${NC}\n"
             printf ">>> "
             read -n 5 ssh_port_input
             echo  # Pour aller à la ligne après l'entrée
