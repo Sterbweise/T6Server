@@ -3,7 +3,7 @@
 # functions.sh - Plutonium Call of Duty: Black Ops II Server Functions
 # Version: 2.1.0
 # Author: Sterbweise
-# Last Updated: 21/08/2024
+# Last Updated: 30/08/2024
 
 # Description:
 # This script contains essential functions used by the Plutonium Call of Duty: Black Ops II
@@ -107,7 +107,13 @@ select_language() {
 # This ensures the system is up-to-date before proceeding with installations
 update_system() {
     {
-        apt update
+        # Check if an update is needed
+        if ! apt-get update --dry-run 2>&1 | grep -q "0 packages can be upgraded"; then
+            apt-get update
+        else
+            # If no update is needed, sleep for a moment to allow the spinner to show
+            sleep 2
+        fi
     } > /dev/null 2>&1 &
     spinner "$(get_message "update")"
 }
@@ -138,7 +144,17 @@ confirm_uninstall() {
 install_firewall() {
     local ssh_port="$1"
     {
-        apt install ufw fail2ban -y
+        # Check if UFW is already installed
+        if ! command -v ufw &> /dev/null; then
+            apt install ufw -y
+        fi
+
+        # Check if fail2ban is already installed
+        if ! command -v fail2ban-client &> /dev/null; then
+            apt install fail2ban -y
+        fi
+
+        # Configure UFW
         ufw allow "$ssh_port"/tcp
         ufw default allow outgoing
         ufw default deny incoming
@@ -149,12 +165,20 @@ install_firewall() {
     # Verify installation
     if ! command -v ufw &> /dev/null || ! command -v fail2ban-client &> /dev/null
     then
-        printf "${RED}Error: Firewall installation failed.${NC}\n"
+        printf "${RED}Error:${NC} Firewall installation failed.\n"
         printf "Attempting reinstallation...\n"
-        apt install ufw fail2ban -y
+        {
+            apt install ufw fail2ban -y
+            ufw allow "$ssh_port"/tcp
+            ufw default allow outgoing
+            ufw default deny incoming
+            ufw -f enable
+        } > /dev/null 2>&1 &
+        spinner "$(get_message "firewall_reinstall")"
+        
         if ! command -v ufw &> /dev/null || ! command -v fail2ban-client &> /dev/null
         then
-            printf "${RED}Error: Reinstallation failed. Please check your internet connection and try again.${NC}\n"
+            printf "${RED}Error:${NC} Reinstallation failed. Please check your internet connection and try again.\n"
             exit 1
         fi
     fi
@@ -164,38 +188,84 @@ install_firewall() {
 # This installs the .NET SDK and runtime required for the server
 install_dotnet() {
     {
-        # Try to get the package for the current distribution
-        PACKAGE_URL="https://packages.microsoft.com/config/$DISTRO/$VERSION/packages-microsoft-prod.deb"
-        if ! wget -q --method=HEAD $PACKAGE_URL; then
-            # If the package doesn't exist, fall back to Debian 10
-            PACKAGE_URL="https://packages.microsoft.com/config/debian/10/packages-microsoft-prod.deb"
+        # Check if dotnet is already installed
+        if ! command -v dotnet &> /dev/null; then
+            # Try to get the package for the current distribution
+            PACKAGE_URL="https://packages.microsoft.com/config/$DISTRO/$VERSION/packages-microsoft-prod.deb"
+            if ! wget -q --method=HEAD $PACKAGE_URL; then
+                # If the package doesn't exist, fall back to Debian 10
+                PACKAGE_URL="https://packages.microsoft.com/config/debian/10/packages-microsoft-prod.deb"
+            fi
+
+            # Install gpg and wget if not already installed
+            if ! command -v gpg &> /dev/null || ! command -v wget &> /dev/null; then
+                apt-get install -y gpg wget
+            fi
+
+            # Download and install Microsoft keys and repository
+            if [ ! -f /etc/apt/trusted.gpg.d/microsoft.asc.gpg ] || [ ! -f /etc/apt/sources.list.d/microsoft-prod.list ]; then
+                wget -q https://packages.microsoft.com/keys/microsoft.asc -O microsoft.asc
+                cat microsoft.asc | gpg --dearmor -o microsoft.asc.gpg
+
+                if [ "$VERSION_ID" = "12" ]; then
+                    # For Debian 12
+                    wget -q https://packages.microsoft.com/config/$ID/$VERSION_ID/prod.list -O microsoft-prod.list
+                    mv microsoft-prod.list /etc/apt/sources.list.d/microsoft-prod.list
+                    SIGNED_BY_PATH=$(grep -oP "(?<=signed-by=).*(?=\])" /etc/apt/sources.list.d/microsoft-prod.list)
+                    mv microsoft.asc.gpg "$SIGNED_BY_PATH"
+                else
+                    # For other versions
+                    mv microsoft.asc.gpg /etc/apt/trusted.gpg.d/
+                    wget -q https://packages.microsoft.com/config/$ID/$VERSION_ID/prod.list -O /etc/apt/sources.list.d/microsoft-prod.list
+                    chown root:root /etc/apt/trusted.gpg.d/microsoft.asc.gpg
+                    chown root:root /etc/apt/sources.list.d/microsoft-prod.list
+                fi
+
+                rm -f microsoft.asc
+            fi
+
+            # Update packages
+            apt-get update
+
+            # Install .NET based on Debian version
+            if [ "$VERSION_ID" = "12" ] || [ "$VERSION_ID" = "11" ]; then
+                if ! dpkg -s aspnetcore-runtime-8.0 &> /dev/null; then
+                    apt-get install -y aspnetcore-runtime-8.0
+                fi
+            elif [ "$VERSION_ID" = "10" ]; then
+                if ! dpkg -s aspnetcore-runtime-7.0 &> /dev/null; then
+                    apt-get install -y aspnetcore-runtime-7.0
+                fi
+            else
+                printf "${RED}Error:${NC} Unsupported Debian version.\n"
+                exit 1
+            fi
+
+            # Clean apt cache
+            apt-get clean
+            apt-get autoremove -y
         fi
-
-        wget $PACKAGE_URL -O packages-microsoft-prod.deb
-        dpkg -i packages-microsoft-prod.deb
-        rm packages-microsoft-prod.deb
-
-        apt-get update
-        apt-get install -y dotnet-sdk-3.1 dotnet-sdk-6.0 aspnetcore-runtime-3.1 aspnetcore-runtime-6.0
-
-        # Verify installation
-        dotnet --version || echo "Dotnet installation failed"
-
-        # Clean apt cache
-        apt-get clean
-        apt-get autoremove -y
     } > /dev/null 2>&1 &
     spinner "$(get_message "dotnet_install")"
     
     # Verify installation
     if ! command -v dotnet &> /dev/null
     then
-        printf "${RED}Error: Dotnet installation failed.${NC}\n"
+        printf "${RED}Error:${NC} Dotnet installation failed.\n"
         printf "Attempting reinstallation...\n"
-        apt-get install -y dotnet-sdk-3.1 dotnet-sdk-6.0 aspnetcore-runtime-3.1 aspnetcore-runtime-6.0
+        if [ "$VERSION_ID" = "12" ]; then
+            apt-get install -y aspnetcore-runtime-8.0
+        elif [ "$VERSION_ID" = "11" ]; then
+            apt-get install -y aspnetcore-runtime-8.0
+        elif [ "$VERSION_ID" = "10" ]; then
+            apt-get install -y aspnetcore-runtime-7.0
+        else
+            printf "${RED}Error:${NC} Unsupported Debian version.\n"
+            exit 1
+        fi
         if ! command -v dotnet &> /dev/null
         then
-            printf "${RED}Error: Reinstallation failed. Please check your internet connection and try again.${NC}\n"
+            printf "${RED}Error:${NC} Reinstallation failed. Please check your internet connection and try again.\n"
             exit 1
         fi
     fi
@@ -205,22 +275,22 @@ install_dotnet() {
 # This is necessary for running 32-bit applications on 64-bit systems
 enable_32bit_packages() {
     {
-        dpkg --add-architecture i386
-        apt-get update -y
-        apt-get install wget gnupg2 software-properties-common apt-transport-https curl -y
+        if ! dpkg --print-foreign-architectures | grep -q i386; then
+            dpkg --add-architecture i386
+            apt-get update -y
+            apt-get install wget gnupg2 software-properties-common apt-transport-https curl -y
+        fi
     } > /dev/null 2>&1 &
     spinner "$(get_message "bit")"
     
     # Verify installation
-    if ! dpkg --print-foreign-architectures | grep -q i386
-    then
-        printf "${RED}Error: 32-bit package activation failed.${NC}\n"
+    if ! dpkg --print-foreign-architectures | grep -q i386; then
+        printf "${RED}Error:${NC} 32-bit package activation failed.\n"
         printf "Attempting reactivation...\n"
         dpkg --add-architecture i386
         apt-get update -y
-        if ! dpkg --print-foreign-architectures | grep -q i386
-        then
-            printf "${RED}Error: Reactivation failed. Please check your system and try again.${NC}\n"
+        if ! dpkg --print-foreign-architectures | grep -q i386; then
+            printf "${RED}Error:${NC} Reactivation failed. Please check your system and try again.\n"
             exit 1
         fi
     fi
@@ -230,34 +300,57 @@ enable_32bit_packages() {
 # This installs Wine, which is necessary for running Windows applications on Linux
 install_wine() {
     {
-        # Add Wine repository key
-        wget -nc https://dl.winehq.org/wine-builds/winehq.key
-        apt-key add winehq.key
-        sudo mv winehq.key /etc/apt/trusted.gpg.d/winehq.asc
-        
-        # Add Wine repository based on Debian version
-        if [ "$VERSION" = "11" ] || [ "$VERSION" = "10" ]; then
-            echo "deb https://dl.winehq.org/wine-builds/debian/ bullseye main" | tee -a /etc/apt/sources.list.d/wine.list > /dev/null
-        elif [ "$VERSION" = "12" ]; then
-            echo "deb https://dl.winehq.org/wine-builds/debian/ bookworm main" | tee -a /etc/apt/sources.list.d/wine.list > /dev/null
-        else
-            echo "deb https://dl.winehq.org/wine-builds/debian/ bullseye main" | tee -a /etc/apt/sources.list.d/wine.list > /dev/null
+        # Add Wine repository key if not already added
+        if ! apt-key list | grep -q "WineHQ"; then
+            wget -nc https://dl.winehq.org/wine-builds/winehq.key
+            apt-key add winehq.key
+            sudo mv winehq.key /etc/apt/trusted.gpg.d/winehq.asc
         fi
-        # Update package list and install Wine
-        apt update -y
-        apt install --install-recommends winehq-stable -y
+        
+        # Add Wine repository based on Debian version if not already added
+        if ! grep -q "https://dl.winehq.org/wine-builds/debian/" /etc/apt/sources.list.d/wine.list; then
+            if [ "$VERSION" = "11" ] || [ "$VERSION" = "10" ]; then
+                echo "deb https://dl.winehq.org/wine-builds/debian/ bullseye main" | tee -a /etc/apt/sources.list.d/wine.list > /dev/null
+            elif [ "$VERSION" = "12" ]; then
+                echo "deb https://dl.winehq.org/wine-builds/debian/ bookworm main" | tee -a /etc/apt/sources.list.d/wine.list > /dev/null
+            else
+                echo "deb https://dl.winehq.org/wine-builds/debian/ bullseye main" | tee -a /etc/apt/sources.list.d/wine.list > /dev/null
+            fi
+        fi
+        
+        # Update package list and install Wine if not already installed
+        if ! dpkg -l | grep -q winehq-stable; then
+            apt update -y
+            apt install --install-recommends winehq-stable -y
+        fi
 
-        # Add Wine environment variables
-        echo 'export WINEPREFIX=~/.wine' >> ~/.bashrc
-        echo 'export WINEDEBUG=fixme-all' >> ~/.bashrc
-        echo 'export WINEARCH=win64' >> ~/.bashrc
-        echo 'export DISPLAY=:0' >> ~/.bashrc
+        # Add Wine environment variables if not already added
+        if ! grep -q "WINEPREFIX" ~/.bashrc; then
+            echo 'export WINEPREFIX=~/.wine' >> ~/.bashrc
+        fi
+        if ! grep -q "WINEDEBUG" ~/.bashrc; then
+            echo 'export WINEDEBUG=-all' >> ~/.bashrc
+        fi
+        if ! grep -q "WINEARCH" ~/.bashrc; then
+            echo 'export WINEARCH=win64' >> ~/.bashrc
+        fi
+        if ! grep -q "WINEESYNC" ~/.bashrc; then
+            echo 'export WINEESYNC=1' >> ~/.bashrc
+        fi
+        if ! grep -q "WINEFSYNC" ~/.bashrc; then
+            echo 'export WINEFSYNC=1' >> ~/.bashrc
+        fi
+        if ! grep -q "WINEDLLOVERRIDES" ~/.bashrc; then
+            echo 'export WINEDLLOVERRIDES="mscoree,mshtml="' >> ~/.bashrc
+        fi
         
         # Apply changes to current session
         source ~/.bashrc
         
-        # Run Wine configuration
-        winecfg
+        # Run Wine configuration if not already configured
+        if [ ! -d "$WINEPREFIX" ]; then
+            winecfg
+        fi
     } > /dev/null 2>&1 &
     spinner "$(get_message "wine")"
     
@@ -279,69 +372,71 @@ install_wine() {
 # This sets up the necessary files and directories for the Plutonium T6 server
 install_game_binaries() {
     {
-        # Download T6ServerConfigs repository
-        git clone https://github.com/xerxes-at/T6ServerConfigs.git /tmp/T6ServerConfigs
-
-        # Create necessary directories
+        # Create necessary directories if they don't exist
         mkdir -p "$WORKDIR/Server/Multiplayer/main" \
                  "$WORKDIR/Server/Multiplayer/t6r/data/gamesettings" \
                  "$WORKDIR/Server/Zombie/main" \
                  "$WORKDIR/Server/Zombie/t6r/data/gamesettings"
+
+        # Clone T6ServerConfigs repository if not already present
+        if [ ! -d "/tmp/T6ServerConfigs" ]; then
+            git clone https://github.com/xerxes-at/T6ServerConfigs.git /tmp/T6ServerConfigs
+        fi
 
         # Move default gamesettings files for Zombie and Multiplayer modes
         if [ -d "/tmp/T6ServerConfigs/localappdata/Plutonium/storage/t6/gamesettings/gamesettings_defaults (REFERENCE ONLY)" ]; then
             # For Zombie mode
             if [ -d "/tmp/T6ServerConfigs/localappdata/Plutonium/storage/t6/gamesettings/gamesettings_defaults (REFERENCE ONLY)/ZM" ]; then
                 mkdir -p "$WORKDIR/Server/Zombie/t6r/data/gamesettings/default"
-                cp -r "/tmp/T6ServerConfigs/localappdata/Plutonium/storage/t6/gamesettings/gamesettings_defaults (REFERENCE ONLY)/ZM"/* "$WORKDIR/Server/Zombie/gamesettings/default/"
+                rsync -a --delete "/tmp/T6ServerConfigs/localappdata/Plutonium/storage/t6/gamesettings/gamesettings_defaults (REFERENCE ONLY)/ZM/" "$WORKDIR/Server/Zombie/t6r/data/gamesettings/default/"
             fi
 
             # For Multiplayer mode
             if [ -d "/tmp/T6ServerConfigs/localappdata/Plutonium/storage/t6/gamesettings/gamesettings_defaults (REFERENCE ONLY)/MP" ]; then
                 mkdir -p "$WORKDIR/Server/Multiplayer/t6r/data/gamesettings/default"
-                cp -r "/tmp/T6ServerConfigs/localappdata/Plutonium/storage/t6/gamesettings/gamesettings_defaults (REFERENCE ONLY)/MP"/* "$WORKDIR/Server/Multiplayer/gamesettings/default/"
+                rsync -a --delete "/tmp/T6ServerConfigs/localappdata/Plutonium/storage/t6/gamesettings/gamesettings_defaults (REFERENCE ONLY)/MP/" "$WORKDIR/Server/Multiplayer/t6r/data/gamesettings/default/"
             fi
         fi
 
         # Copy files to their respective locations
-        # Copy dedicated.cfg to Multiplayer main directory
-        cp /tmp/T6ServerConfigs/localappdata/Plutonium/storage/t6/dedicated.cfg "$WORKDIR/Server/Multiplayer/main/"
-        cp /tmp/T6ServerConfigs/localappdata/Plutonium/storage/t6/restricted.cfg "$WORKDIR/Server/Multiplayer/t6r/data/"
-        cp /tmp/T6ServerConfigs/localappdata/Plutonium/storage/t6/dedicated_zm.cfg "$WORKDIR/Server/Zombie/main/"
+        rsync -a "/tmp/T6ServerConfigs/localappdata/Plutonium/storage/t6/dedicated.cfg" "$WORKDIR/Server/Multiplayer/main/"
+        rsync -a "/tmp/T6ServerConfigs/localappdata/Plutonium/storage/t6/restricted.cfg" "$WORKDIR/Server/Multiplayer/t6r/data/"
+        rsync -a "/tmp/T6ServerConfigs/localappdata/Plutonium/storage/t6/dedicated_zm.cfg" "$WORKDIR/Server/Zombie/main/"
         
         # Copy MP recipes to Multiplayer t6r/data directory
         if [ -d "/tmp/T6ServerConfigs/localappdata/Plutonium/storage/t6/recipes/mp" ]; then
             mkdir -p "$WORKDIR/Server/Multiplayer/t6r/data/recipes"
-            cp -r "/tmp/T6ServerConfigs/localappdata/Plutonium/storage/t6/recipes/mp" "$WORKDIR/Server/Multiplayer/t6r/data/recipes/"
+            rsync -a --delete "/tmp/T6ServerConfigs/localappdata/Plutonium/storage/t6/recipes/mp/" "$WORKDIR/Server/Multiplayer/t6r/data/recipes/"
         fi
+
         # Copy gamesettings files to their respective locations
         for file in /tmp/T6ServerConfigs/localappdata/Plutonium/storage/t6/gamesettings/*; do
             if [[ $(basename "$file") == zm_* ]]; then
-                cp "$file" "$WORKDIR/Server/Zombie/t6r/data/gamesettings/"
+                rsync -a "$file" "$WORKDIR/Server/Zombie/t6r/data/gamesettings/"
             else
-                cp "$file" "$WORKDIR/Server/Multiplayer/t6r/data/gamesettings/"
+                rsync -a "$file" "$WORKDIR/Server/Multiplayer/t6r/data/gamesettings/"
             fi
         done
 
         # Clean up
         rm -rf /tmp/T6ServerConfigs
         
-        # Create symbolic links
-        ln -s "$WORKDIR/Ressources/.sources/binkw32.dll" "$WORKDIR/Server/Zombie"
-        ln -s "$WORKDIR/Ressources/.sources/codlogo.bmp" "$WORKDIR/Server/Zombie"
+        # Create symbolic links if they don't exist
+        ln -sfn "$WORKDIR/Ressources/.sources/binkw32.dll" "$WORKDIR/Server/Zombie/binkw32.dll"
+        ln -sfn "$WORKDIR/Ressources/.sources/codlogo.bmp" "$WORKDIR/Server/Zombie/codlogo.bmp"
+        ln -sfn "$WORKDIR/Ressources/.sources/binkw32.dll" "$WORKDIR/Server/Multiplayer/binkw32.dll"
+        ln -sfn "$WORKDIR/Ressources/.sources/codlogo.bmp" "$WORKDIR/Server/Multiplayer/codlogo.bmp"
+        ln -sfn "$WORKDIR/Ressources/.sources/zone" "$WORKDIR/Server/Zombie/zone"
+        ln -sfn "$WORKDIR/Ressources/.sources/zone" "$WORKDIR/Server/Multiplayer/zone"
 
-        ln -s "$WORKDIR/Ressources/.sources/binkw32.dll" "$WORKDIR/Server/Multiplayer"
-        ln -s "$WORKDIR/Ressources/.sources/codlogo.bmp" "$WORKDIR/Server/Multiplayer"
-
-        ln -s "$WORKDIR/Ressources/.sources/zone" "$WORKDIR/Server/Zombie/zone"
-        ln -s "$WORKDIR/Ressources/.sources/zone" "$WORKDIR/Server/Multiplayer/zone"
-
-        # Download and extract plutonium-updater
-        cd "$WORKDIR/Plutonium/" || exit
-        wget https://github.com/mxve/plutonium-updater.rs/releases/latest/download/plutonium-updater-x86_64-unknown-linux-gnu.tar.gz
-        tar xfv plutonium-updater-x86_64-unknown-linux-gnu.tar.gz
-        rm plutonium-updater-x86_64-unknown-linux-gnu.tar.gz
-        chmod +x plutonium-updater
+        # Download and extract plutonium-updater if not already present
+        if [ ! -f "$WORKDIR/Plutonium/plutonium-updater" ]; then
+            cd "$WORKDIR/Plutonium/" || exit
+            wget -O plutonium-updater.tar.gz https://github.com/mxve/plutonium-updater.rs/releases/latest/download/plutonium-updater-x86_64-unknown-linux-gnu.tar.gz
+            tar xfv plutonium-updater.tar.gz
+            rm plutonium-updater.tar.gz
+            chmod +x plutonium-updater
+        fi
 
         # Make T6Server.sh executable
         chmod +x "$WORKDIR/Plutonium/T6Server.sh"
@@ -355,25 +450,71 @@ install_game_binaries() {
 
 # Function to uninstall game binaries
 uninstall_game_binaries() {
-    {
-        rm -rf "$WORKDIR"
-    } > /dev/null 2>&1 &
-    spinner "$(get_message "uninstall_binary")"
+    if [ -d "$WORKDIR" ]; then
+        {
+            rm -rf "$WORKDIR"
+        } > /dev/null 2>&1 &
+        spinner "$(get_message "uninstall_binary")"
+    else
+        echo "$(get_message "workdir_not_found")"
+    fi
 }
 
 uninstall_dotnet() {
     {
-        apt-get remove -y dotnet-sdk-3.1 dotnet-sdk-6.0 aspnetcore-runtime-3.1 aspnetcore-runtime-6.0
-        rm /etc/apt/sources.list.d/microsoft-prod.list
-        apt-get update
+        # Check if .NET packages are installed before attempting to remove
+        if dpkg -l | grep -qE "aspnetcore-runtime-8.0|aspnetcore-runtime-7.0"; then
+            if [ "$VERSION_ID" = "12" ] || [ "$VERSION_ID" = "11" ]; then
+                apt-get remove -y aspnetcore-runtime-8.0
+            elif [ "$VERSION_ID" = "10" ]; then
+                apt-get remove -y aspnetcore-runtime-7.0
+            fi
+        fi
+
+        # Remove Microsoft repository list file if it exists
+        if [ -f /etc/apt/sources.list.d/microsoft-prod.list ]; then
+            rm /etc/apt/sources.list.d/microsoft-prod.list
+        fi
+
+        # Update package list only if changes were made
+        if [ $? -eq 0 ]; then
+            apt-get update
+        fi
     } > /dev/null 2>&1 &
     spinner "$(get_message "uninstall_dotnet")"
 }
 
 uninstall_wine() {
     {
-        apt-get remove --purge winehq-stable -y
-        apt-add-repository --remove 'deb https://dl.winehq.org/wine-builds/debian/ buster main'
+        # Check if Wine is installed before attempting to remove
+        if dpkg -l | grep -q winehq-stable; then
+            apt-get remove --purge winehq-stable -y
+        fi
+
+        # Remove Wine repository based on Debian version if it exists
+        if [ -f /etc/apt/sources.list.d/wine.list ]; then
+            rm /etc/apt/sources.list.d/wine.list
+        fi
+
+        # Remove Wine repository key if it exists
+        if [ -f /etc/apt/trusted.gpg.d/winehq.asc ]; then
+            rm /etc/apt/trusted.gpg.d/winehq.asc
+        fi
+
+        # Remove Wine environment variables from .bashrc
+        sed -i '/WINEPREFIX/d' ~/.bashrc
+        sed -i '/WINEDEBUG/d' ~/.bashrc
+        sed -i '/WINEARCH/d' ~/.bashrc
+        sed -i '/WINEESYNC/d' ~/.bashrc
+        sed -i '/WINEFSYNC/d' ~/.bashrc
+        sed -i '/WINEDLLOVERRIDES/d' ~/.bashrc
+
+        # Remove Wine prefix directory if it exists
+        if [ -d "$HOME/.wine" ]; then
+            rm -rf "$HOME/.wine"
+        fi
+
+        # Update package list
         apt-get update
     } > /dev/null 2>&1 &
     spinner "$(get_message "uninstall_wine")"
@@ -382,36 +523,49 @@ uninstall_wine() {
 # Remove Firewall
 remove_firewall() {
     {
-        ufw disable
-        apt-get remove --purge ufw fail2ban -y
+        # Check if ufw is installed before attempting to disable
+        if command -v ufw >/dev/null 2>&1; then
+            ufw disable
+        fi
+
+        # Check if ufw or fail2ban are installed before attempting to remove
+        if dpkg -l | grep -qE "ufw|fail2ban"; then
+            apt-get remove --purge ufw fail2ban -y
+        fi
+
+        # Clean up any leftover configuration files
+        apt-get autoremove -y
+        apt-get autoclean
     } > /dev/null 2>&1 &
     spinner "$(get_message "remove_firewall")"
 }
 
 ask_installations() {
     # Ask about firewall installation
-    while true; do
-        printf "\n${YELLOW}$(get_message "firewall")${NC}\n"
-        printf ">>> "
-        read -n 1 -r firewall_input
-        echo  # Pour aller à la ligne après l'entrée
-        case $firewall_input in
-            [yYoO])
-                firewall="yes"
-                break
-                ;;
-            [nN])
-                firewall="no"
-                break
-                ;;
-            *)
-                echo "Invalid input. Please enter Y/y/O/o for Yes, or N/n for No."
-                ;;
-        esac
-    done
+    if [[ -z "$firewall" ]]; then
+        while true; do
+            printf "\n${YELLOW}$(get_message "firewall")${NC}\n"
+            printf ">>> "
+            read -n 1 -r firewall_input
+            echo  # Pour aller à la ligne après l'entrée
+            case $firewall_input in
+                [yYoO])
+                    firewall="yes"
+                    break
+                    ;;
+                [nN])
+                    firewall="no"
+                    break
+                    ;;
+                *)
+                    echo "Invalid input. Please enter Y/y/O/o for Yes, or N/n for No."
+                    ;;
+            esac
+        done
+    fi
 
     # Ask for SSH port if firewall is to be installed
-    if [[ "$firewall" == "yes" ]]; then
+    if [[ "$firewall" == "yes" && -z "$ssh_port" ]]; then
         while true; do
             printf "\n${YELLOW}$(get_message "ssh_port")${NC}\n"
             printf ">>> "
@@ -427,25 +581,27 @@ ask_installations() {
     fi
 
     # Ask about Dotnet installation
-    while true; do
-        printf "\n${YELLOW}$(get_message "dotnet")${NC}\n"
-        printf ">>> "
-        read -n 1 -r dotnet_input
-        echo  # Pour aller à la ligne après l'entrée
-        case $dotnet_input in
-            [yYoO])
-                dotnet="yes"
-                break
-                ;;
-            [nN])
-                dotnet="no"
-                break
-                ;;
-            *)
-                echo "Invalid input. Please enter Y/y/O/o for Yes, or N/n for No."
-                ;;
-        esac
-    done
+    if [[ -z "$dotnet" ]]; then
+        while true; do
+            printf "\n${YELLOW}$(get_message "dotnet")${NC}\n"
+            printf ">>> "
+            read -n 1 -r dotnet_input
+            echo  # Pour aller à la ligne après l'entrée
+            case $dotnet_input in
+                [yYoO])
+                    dotnet="yes"
+                    break
+                    ;;
+                [nN])
+                    dotnet="no"
+                    break
+                    ;;
+                *)
+                    echo "Invalid input. Please enter Y/y/O/o for Yes, or N/n for No."
+                    ;;
+            esac
+        done
+    fi
 }
 
 finish_installation() {
