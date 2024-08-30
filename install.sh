@@ -48,6 +48,10 @@ clear_and_show_logo
 # Ensures the system is up-to-date before proceeding with the installation
 update_system
 
+# Install dependencies
+# Installs necessary dependencies for the script to function
+install_dependencies
+
 # Configure firewall if requested
 # Sets up firewall rules to allow server traffic if the user opts for it
 if [[ "$firewall" =~ ^[yYoO]$ ]] || [[ -z "$firewall" ]]; then

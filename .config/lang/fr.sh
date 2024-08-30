@@ -22,6 +22,7 @@
 select_language_fr="Sélectionnez votre langue :"
 firewall_fr="Voulez-vous installer le pare-feu UFW (O/n) ?"
 ssh_port_fr="Entrez le port SSH à ouvrir (par défaut : 22) :"
+ssh_port_enter_fr="Si vous ne pouvez pas utiliser ENTREE, appuyez sur la barre espace plusieurs fois."
 dotnet_fr="Voulez-vous installer Dotnet [Requis pour IW4Madmin] (O/n) ?"
 dotnet_failed_install_fr="L'installation de .NET a échoué"
 update_fr="Mise à jour du système"
@@ -32,6 +33,7 @@ dotnet_install_fr="Installation de Dotnet."
 binary_fr="Installation des fichiers binaires."
 finish_fr="Installation terminée."
 quit_fr="Appuyez sur CTRL+C pour quitter."
+dependencies_install_fr="Installation des dépendances."
 
 # Messages de désinstallation
 # Ces messages sont affichés pendant le processus de désinstallation du serveur

@@ -22,6 +22,7 @@
 select_language_en="Select your language:"
 firewall_en="Do you want to install UFW firewall (Y/n)?"
 ssh_port_en="Enter the SSH port to open (default: 22):"
+ssh_port_enter_en="If you cannot use ENTER, press the SPACE bar multiple times."
 dotnet_en="Do you want to install Dotnet [Required for IW4Madmin] (Y/n)?"
 dotnet_failed_install_en="Dotnet installation failed."
 update_en="Updating the system"
@@ -32,6 +33,7 @@ dotnet_install_en="Installing Dotnet."
 binary_en="Game Binary Installation."
 finish_en="Installation finished."
 quit_en="Press CTRL+C to quit."
+dependencies_install_en="Installing dependencies."
 
 # Uninstallation Messages
 # These messages are displayed during the server uninstallation process

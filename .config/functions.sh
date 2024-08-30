@@ -139,6 +139,28 @@ confirm_uninstall() {
 
 ## INSTALLATION FUNCTIONS
 
+# Function to install dependencies
+# This installs necessary software that doesn't require special package repositories
+install_dependencies() {
+    {
+        apt-get install -y sudo wget gnupg2 software-properties-common apt-transport-https curl
+    } > /dev/null 2>&1 &
+    spinner "$(get_message "dependencies_install")"
+    
+    # Verify installation
+    if ! command -v wget &> /dev/null || ! command -v gnupg2 &> /dev/null || ! command -v curl &> /dev/null
+    then
+        printf "${RED}Error:${NC} Dependencies installation failed.\n"
+        printf "Attempting reinstallation...\n"
+        apt-get install -y wget gnupg2 software-properties-common apt-transport-https curl
+        if ! command -v wget &> /dev/null || ! command -v gnupg2 &> /dev/null || ! command -v curl &> /dev/null
+        then
+            printf "${RED}Error:${NC} Reinstallation failed. Please check your internet connection and try again.\n"
+            exit 1
+        fi
+    fi
+}
+
 # Function to install firewall
 # This sets up UFW and fail2ban for improved server security
 install_firewall() {
@@ -195,11 +217,6 @@ install_dotnet() {
             if ! wget -q --method=HEAD $PACKAGE_URL; then
                 # If the package doesn't exist, fall back to Debian 10
                 PACKAGE_URL="https://packages.microsoft.com/config/debian/10/packages-microsoft-prod.deb"
-            fi
-
-            # Install gpg and wget if not already installed
-            if ! command -v gpg &> /dev/null || ! command -v wget &> /dev/null; then
-                apt-get install -y gpg wget
             fi
 
             # Download and install Microsoft keys and repository
@@ -278,7 +295,6 @@ enable_32bit_packages() {
         if ! dpkg --print-foreign-architectures | grep -q i386; then
             dpkg --add-architecture i386
             apt-get update -y
-            apt-get install wget gnupg2 software-properties-common apt-transport-https curl -y
         fi
     } > /dev/null 2>&1 &
     spinner "$(get_message "bit")"
@@ -565,9 +581,10 @@ ask_installations() {
     fi
 
     # Ask for SSH port if firewall is to be installed
-    if [[ "$firewall" == "yes" && -z "$ssh_port" ]]; then
+    if [[ "$firewall" == "yes" ]]; then
         while true; do
             printf "\n${YELLOW}$(get_message "ssh_port")${NC}\n"
+            printf "${LIGHT_PURPLE}$(get_message "ssh_port_enter")${NC}\n"
             printf ">>> "
             read -n 5 ssh_port_input
             echo  # Pour aller à la ligne après l'entrée
