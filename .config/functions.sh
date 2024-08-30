@@ -148,12 +148,12 @@ install_dependencies() {
     spinner "$(get_message "dependencies_install")"
     
     # Verify installation
-    if ! command -v wget &> /dev/null || ! command -v gnupg2 &> /dev/null || ! command -v curl &> /dev/null
+    if ! command -v wget &> /dev/null || ! command -v gpg &> /dev/null || ! command -v curl &> /dev/null || ! dpkg -s software-properties-common &> /dev/null || ! dpkg -s apt-transport-https &> /dev/null
     then
         printf "${RED}Error:${NC} Dependencies installation failed.\n"
         printf "Attempting reinstallation...\n"
-        apt-get install -y wget gnupg2 software-properties-common apt-transport-https curl
-        if ! command -v wget &> /dev/null || ! command -v gnupg2 &> /dev/null || ! command -v curl &> /dev/null
+        apt-get install -y wget gnupg software-properties-common apt-transport-https curl
+        if ! command -v wget &> /dev/null || ! command -v gpg &> /dev/null || ! command -v curl &> /dev/null || ! dpkg -s software-properties-common &> /dev/null || ! dpkg -s apt-transport-https &> /dev/null
         then
             printf "${RED}Error:${NC} Reinstallation failed. Please check your internet connection and try again.\n"
             exit 1
