@@ -1,7 +1,7 @@
 # T6 Server - Plutonium Black Ops II Server Installer
 
 ![Version](https://img.shields.io/badge/Version-2.1.0-blue)
-![Debian](https://img.shields.io/badge/Debian-10%20%7C%2011%20%7C%2012-brightgreen?logo=Debian)
+![Debian](https://img.shields.io/badge/Debian-10%20%7C%2011%20%7C%2012-brightgreen?showLogo=Debian)
 ![Plutonium T6](https://img.shields.io/badge/Plutonium-T6-blue)
 ![License](https://img.shields.io/badge/License-GPL--3.0-yellow)
 ![GitHub repo size](https://img.shields.io/github/repo-size/Sterbweise/T6Server)
@@ -10,7 +10,7 @@
 ![GitHub issues](https://img.shields.io/github/issues/Sterbweise/T6Server)
 ![GitHub last commit](https://img.shields.io/github/last-commit/Sterbweise/T6Server)
 
-<img src="https://imgur.com/bBrx8Hf.png" alt="Plutonium Logo" width="350"/>
+<img src="https://imgur.com/bBrx8Hf.png" alt="Plutonium showLogo" width="350"/>
 
 T6 Server is a comprehensive management suite for setting up and running Plutonium Call of Duty: Black Ops II servers on Debian-based systems. This project aims to simplify the process of installing, configuring, and managing T6 servers, making it accessible to both beginners and experienced server administrators.
 

@@ -19,36 +19,38 @@
 # Messages d'installation
 # Ces messages sont affichés pendant le processus d'installation du serveur
 
-select_language_fr="Sélectionnez votre langue :"
-firewall_fr="Voulez-vous installer le pare-feu UFW (O/n) ?"
-ssh_port_fr="Entrez le port SSH à ouvrir (par défaut : 22) :"
-ssh_port_enter_fr="Si vous ne pouvez pas utiliser ENTREE, appuyez sur la barre espace plusieurs fois."
-dotnet_fr="Voulez-vous installer Dotnet [Requis pour IW4Madmin] (O/n) ?"
-dotnet_failed_install_fr="L'installation de .NET a échoué"
+# Messages utilitaires
+selectLanguage_fr="Sélectionnez votre langue :"
 update_fr="Mise à jour du système"
-firewall_install_fr="Installation du pare-feu et ouverture des ports."
 bit_fr="Activation des paquets 32 bits"
-wine_fr="Installation de Wine."
-dotnet_install_fr="Installation de Dotnet."
-binary_fr="Installation des fichiers binaires."
 finish_fr="Installation terminée."
 quit_fr="Appuyez sur CTRL+C pour quitter."
 dependencies_install_fr="Installation des dépendances."
 
-# Messages de désinstallation
-# Ces messages sont affichés pendant le processus de désinstallation du serveur
+# Messages du pare-feu
+firewall_fr="Voulez-vous installer le pare-feu UFW (O/n) ?"
+ssh_port_fr="Entrez le port SSH à ouvrir (par défaut : 22) :"
+ssh_port_enter_fr="Si vous ne pouvez pas utiliser ENTREE, appuyez sur la barre espace plusieurs fois."
+firewall_install_fr="Installation du pare-feu et ouverture des ports."
 
-confirm_uninstall_fr="Êtes-vous sûr de vouloir désinstaller ? Cela supprimera tous les composants installés par le script de configuration."
+# Messages Dotnet
+dotnet_fr="Voulez-vous installer Dotnet [Requis pour IW4Madmin] (O/n) ?"
+dotnet_failed_install_fr="L'installation de Dotnet a échoué."
+dotnet_install_fr="Installation de Dotnet."
+
+# Messages Wine
+wine_fr="Installation de Wine."
+
+# Messages des fichiers binaires du jeu
+binary_fr="Installation des fichiers binaires du jeu."
+
+# Messages de désinstallation
+confirmUninstall_fr="Êtes-vous sûr de vouloir désinstaller ? Cela supprimera tous les composants installés par le script de configuration."
 confirm_prompt_fr="Tapez 'o' pour confirmer : "
 uninstall_cancelled_fr="Désinstallation annulée."
 uninstall_binary_fr="Désinstallation des fichiers binaires du jeu."
-uninstall_dotnet_fr="Désinstallation de Dotnet."
-uninstall_wine_fr="Désinstallation de Wine."
+uninstallDotnet_fr="Désinstallation de Dotnet."
+uninstallWine_fr="Désinstallation de Wine."
 remove_firewall_fr="Suppression du pare-feu."
 cleanup_fr="Nettoyage."
 uninstall_finish_fr="Désinstallation terminée."
-
-# Note: Chaque variable contient un message spécifique utilisé à différentes étapes
-# des processus d'installation et de désinstallation. Ces messages sont conçus pour
-# guider l'utilisateur tout au long du processus et fournir des informations claires
-# sur les actions en cours d'exécution.
