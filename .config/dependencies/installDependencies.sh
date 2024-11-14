@@ -31,8 +31,10 @@ installDependencies() {
             exit 1
         fi
     fi
-
-    printf "${GREEN}Success:${NC} Dependencies have been installed.\n"
+    
+    if [ "$1" = "--install" ]; then
+        printf "${GREEN}Success:${NC} Dependencies have been installed.\n"
+    fi
 }
 
 # Run the installation function if --install is provided

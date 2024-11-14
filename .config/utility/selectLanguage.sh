@@ -22,5 +22,4 @@ selectLanguage() {
                 ;;
         esac
     done
-    showLogo
 }

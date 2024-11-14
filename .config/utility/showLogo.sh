@@ -1,6 +1,6 @@
 # Function to display the showLogo
 # This function prints a stylized ASCII art showLogo for the T6 Server Installer
-showshowLogo() {
+showLogo() {
     stty igncr
     clear
     printf "${RED}
