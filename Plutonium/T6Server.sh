@@ -1,9 +1,9 @@
 #!/bin/bash
 
 # T6Server.sh - Plutonium Call of Duty: Black Ops II Server Script
-# Version: 2.1.0
+# Version: 3.1.1
 # Author: Sterbweise
-# Last Updated: 21/08/2024
+# Last Updated: 07/12/2024
 
 # Description:
 # This script is designed to run and manage a dedicated server for Call of Duty: Black Ops II
@@ -42,7 +42,7 @@ readonly SERVER_KEY="YOURKEY"
 readonly CONFIG_FILE="dedicated.cfg"
 
 # The UDP port your server will listen on
-readonly SERVER_PORT=4976
+readonly SERVER_PORT=21889
 
 # Game mode selection
 # This determines which game mode your server will run.
@@ -53,10 +53,24 @@ readonly GAME_MODE="t6mp"
 # Installation directory of Plutonium
 readonly INSTALL_DIR="/opt/T6Server/Plutonium"
 
+# Game mod selection
+# This is the game mod that your server will run.
+# For Exemple mode, use: "mods/zm_weapons"
+#readonly MOD="mods/zm_weapons"
+
 # Note: To switch to Zombie mode, make the following changes:
 # 1. Set GAME_PATH to "/opt/T6Server/Server/Zombie"
 # 2. Set CONFIG_FILE to "dedicated_zm.cfg"
 # 3. Set GAME_MODE to "t6zm"
+
+# Additional startup options
+readonly ADDITIONAL_PARAMS=""
+# Example:
+#     +set sv_network_protocol 1
+#     +set sv_maxclients 4
+#     +set sv_anticheat 1
+#     +set sv_pure 1
+
 
 # Function to update server files
 # This function uses the Plutonium updater to ensure your server is running the latest version
@@ -82,7 +96,14 @@ start_server() {
     # Main server loop
     while true; do
         # Start the server using Wine
-        wine .\\bin\\plutonium-bootstrapper-win32.exe "$GAME_MODE" "$GAME_PATH" -dedicated +start_map_rotate +set key "$SERVER_KEY" +set net_port "$SERVER_PORT" +set sv_config "$CONFIG_FILE" 2>/dev/null
+        nice -n -10 wine ./bin/plutonium-bootstrapper-win32.exe $GAME_MODE $GAME_PATH -dedicated \
+            +set key $SERVER_KEY \
+            +set fs_game $MOD \
+            +set net_port $SERVER_PORT \
+            +exec $CONFIG_FILE \
+            $ADDITIONAL_PARAMS \
+            +map_rotate \
+            2>/dev/null
         
         # If the server stops, log the event and restart
         printf -v timestamp '%(%F_%H:%M:%S)T' -1

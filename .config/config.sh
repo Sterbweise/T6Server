@@ -1,9 +1,9 @@
 #!/bin/bash
 
 # config.sh - Configuration file for Plutonium Call of Duty: Black Ops II Server
-# Version: 2.1.0
+# Version: 3.1.1
 # Author: Sterbweise
-# Last Updated: 21/08/2024
+# Last Updated: 07/12/2024
 
 # Description:
 # This script defines global variables and configurations used across the server installation
@@ -15,9 +15,14 @@
 
 # Note: Modify the variables in this file to customize your server setup.
 
+# Set default language and locale settings
+# These ensure consistent character encoding and language behavior across the system
+export LANG=C.UTF-8
+export LC_ALL=C.UTF-8
+
 # Work directory
 # This is the base directory where the server files will be installed
-WORKDIR="/opt/T6Server"
+WORKDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." &> /dev/null && pwd)"
 
 # Distribution detection
 # Automatically detects the Linux distribution and version
@@ -58,10 +63,12 @@ firewall=""   # Firewall configuration (empty string for default behavior)
 ssh_port=22   # Default SSH port
 dotnet=""     # .NET installation flag (empty string for default behavior)
 
-# Language file sourcing
-# Determines the script's directory and sources language files
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)"
-source "$SCRIPT_DIR/lang/en.sh"  # English language file
-source "$SCRIPT_DIR/lang/fr.sh"  # French language file
-
-# Note: Additional language files can be added here as needed
+# Function to check and install required commands
+checkAndInstallCommand() {
+    local command=$1
+    local package=$2
+    if ! command -v "$command" &> /dev/null; then
+        printf "Installing %s...\n" "$package"
+        apt-get install -y "$package" > /dev/null 2>&1
+    fi
+}

@@ -1,9 +1,9 @@
 #!/bin/bash
 
 # uninstall.sh - Plutonium Call of Duty: Black Ops II Server Uninstallation Script
-# Version: 2.1.0
+# Version: 3.1.1
 # Author: Sterbweise
-# Last Updated: 21/08/2024
+# Last Updated: 01/09/2024
 
 # Description:
 # This script automates the uninstallation process for a Plutonium Call of Duty: Black Ops II
@@ -19,7 +19,7 @@
 # These files contain necessary variables and functions used throughout the script
 DEFAULT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)"
 source "$DEFAULT_DIR/.config/config.sh"
-source "$DEFAULT_DIR/.config/functions.sh"
+source "$DEFAULT_DIR/.config/function.sh" --debug
 
 # Check for sudo permissions
 # The script requires elevated privileges to perform system-wide changes
@@ -29,24 +29,24 @@ if [[ $UID != 0 ]]; then
     exit 1
 fi
 
-# Display logo and clear screen
+# Display showLogo and clear screen
 # This function improves user experience by presenting a clean interface
-clear_and_show_logo
+showLogo
 
 # Language selection
 # Allows users to choose their preferred language for script messages
-select_language
-clear_and_show_logo
+selectLanguage
+showLogo
 
 # Confirm uninstallation
 # Prompts the user to confirm before proceeding with the uninstallation
-confirm_uninstall
+confirmUninstall
 
 # Perform uninstallation
 # These functions remove the various components installed by the installation script
-uninstall_game_binaries  # Removes game files and directories
-uninstall_dotnet         # Uninstalls .NET framework
-uninstall_wine           # Removes Wine
+uninstallGameBinaries   # Removes game files and directories
+uninstallDotnet         # Uninstalls .NET framework
+uninstallWine           # Removes Wine
 remove_firewall          # Reverts firewall changes made during installation
 
 # Clean up
@@ -55,11 +55,11 @@ remove_firewall          # Reverts firewall changes made during installation
     apt-get autoremove -y
     apt-get clean
 } > /dev/null 2>&1 &
-spinner "$(get_message "cleanup")"
+showProgressIndicator "$(getMessage "cleanup")"
 
 # Display completion message
 # Informs the user that the uninstallation process is complete
-finish_installation
+finishInstallation
 
 # Reset terminal settings and exit
 # Ensures the terminal is left in a clean state after script execution
