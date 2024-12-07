@@ -15,7 +15,11 @@ fi
 installDependencies() {
     {
         apt-get update
-        apt-get install -y sudo tar wget gnupg2 software-properties-common apt-transport-https curl
+        apt-get install -y sudo tar wget gnupg2 software-properties-common apt-transport-https curl \
+            libssl1.1 \
+            libcurl4 \
+            libc6:i386 \
+            libstdc++6:i386
     } > /dev/null 2>&1 &
     showProgressIndicator "$(getMessage "dependencies_install")"
     

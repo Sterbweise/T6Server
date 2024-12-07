@@ -1,61 +1,64 @@
 #!/bin/bash
-echo ""
-echo "----------------------------------------------------------"
-printf -v DATE '%(%F)T' -1
-echo "[${DATE}] Start Operation Restarting Servers"
-echo "----------------------------------------------------------"
-# IP adress without separator -> Curl IW4Madmin (Exemple: 127001)
-ipadress="YOURIPADRESS"
-## -- Zombies Servers -- ##
-# Number of running servers
-server_number=$(ps aux | grep t6zm | grep -v grep |  wc -l)
-servers=$(ps aux | grep t6zm | grep -v grep)
-for ((i=1; i<=$server_number; i++))
-  do
-    # Get PID process
-    process=$(echo "$servers"  | sed -n "${i}p")
-    PID=$(echo "$process" | awk  '{print $2}')
-    # Server port listening
-    port=$(echo "$process" | awk  '{print $21}' | sed -n '1p')
-    # CFG Name
-    name=$(echo "$process" | awk  '{print $24}' | sed -n '1p' | cut -d '.' -f1)
-    # Number of client connected on the server # IW4Madmin Required
-    connected_client=$(curl -X GET "http://localhost:1624/server/clientactivity/${ipadress}${port}" 2>/dev/null | sed -n '/href="/,/a>/p' | grep 'ColorCode' | cut -d '>' -f2 | cut -d '<' -f1 | wc -l)
-    # Kill Process if 0 client are connected
-    if [[ "$connected_client" == "0" ]]; then
-      kill -9 "${PID}" 2> /dev/null
-      printf -v NOW '%(%H:%M:%S)T' -1
-      echo "[${NOW}] Zombies Server [ ${name} ] Restarting..."
-    else
-      printf -v NOW '%(%H:%M:%S)T' -1
-      echo "[${NOW}] Zombies Server [ ${name} ] have ${connected_client} clients online"
-    fi
-  done
 
-## -- Multiplayers Servers -- ##
-# Number of running servers
-server_number=$(ps aux | grep t6mp | grep -v grep |  wc -l)
-servers=$(ps aux | grep t6mp | grep -v grep)
-for ((i=1; i<=$server_number; i++))
-  do
-    # Get PID process
-    process=$(echo "$servers"  | sed -n "${i}p")
-    PID=$(echo "$process" | awk  '{print $2}')
-    # Server port listening
-    port=$(echo "$process" | awk  '{print $21}' | sed -n '1p')
-    # CFG Name
-    name=$(echo "$process" | awk  '{print $24}' | sed -n '1p' | cut -d '.' -f1)
-    # Number of client connected on the server # IW4Madmin Required
-    connected_client=$(curl -X GET "http://localhost:1624/server/clientactivity/${ipadress}${port}" 2>/dev/null | sed -n '/href="/,/a>/p' | grep 'ColorCode' | cut -d '>' -f2 | cut -d '<' -f1 | wc -l)
-    # Kill Process if 0 client are connected
-    if [[ "$connected_client" == "0" ]]; then
-      kill -9 "${PID}" 2> /dev/null
-      printf -v NOW '%(%H:%M:%S)T' -1
-      echo "[${NOW}] Multiplayers Server [ ${name} ] Restarting..."
+# Configuration
+SERVER_IP="127.0.0.1"  # Replace with your server IP
+RCON_PORT="28960"      # Replace with your RCON port
+RCON_PASSWORD="your_password"  # Replace with your RCON password
+
+# Function to send RCON commands
+send_rcon_command() {
+    echo "$(echo -e "\xff\xff\xff\xffrcon ${RCON_PASSWORD} $1" | nc -u -w 1 ${SERVER_IP} ${RCON_PORT})"
+}
+
+# Get the number of players
+get_player_count() {
+    local response=$(send_rcon_command "status")
+    # Extract player count (adjust according to exact response format)
+    echo "$response" | grep -oP '\d+(?= players)' || echo "0"
+}
+
+# Check server uptime
+get_server_uptime() {
+    local pid=$(pgrep -f "t6_server")  # Adjust according to exact process name
+    if [ -n "$pid" ]; then
+        echo $(($(date +%s) - $(date +%s -r "/proc/$pid")))
     else
-      printf -v NOW '%(%H:%M:%S)T' -1
-      echo "[${NOW}] Multiplayers Server [ ${name} ] have ${connected_client} clients online"
+        echo "0"
     fi
-  done
-echo "----------------------------------------------------------"
-echo ""
+}
+
+# Main program
+main() {
+    # Get player count
+    PLAYER_COUNT=$(get_player_count)
+    
+    # Get uptime in seconds
+    UPTIME=$(get_server_uptime)
+    
+    # 2 hours in seconds
+    TWO_HOURS=$((2 * 60 * 60))
+    
+    echo "Connected players: $PLAYER_COUNT"
+    echo "Server uptime: $UPTIME seconds"
+    
+    # Check restart conditions
+    if [ "$PLAYER_COUNT" -eq 0 ] && [ "$UPTIME" -gt "$TWO_HOURS" ]; then
+        echo "Restart conditions met. Restarting server..."
+        
+        # Graceful server shutdown via RCON
+        send_rcon_command "quit"
+        
+        # Wait for server to stop
+        sleep 10
+        
+        # Restart server (adjust according to your configuration)
+        /path/to/your/startup/script/server_start.sh
+        
+        echo "Server restarted successfully."
+    else
+        echo "Restart conditions not met. Server continues running."
+    fi
+}
+
+# Execute main program
+main

@@ -15,19 +15,15 @@ finishInstallation() {
     
     # Display summary of installed components
     printf "\n${CYAN}Installation Summary:${NC}\n"
-    [[ "$firewall" == "yes" ]] && printf "- Firewall installed (SSH port: $ssh_port)\n"
-    [[ "$dotnet" == "yes" ]] && printf "- .NET installed\n"
-    printf "- Game binaries installed\n"
+    [[ "$firewall" == "yes" ]] && printf "%s\n" "- Firewall installed (SSH port: $ssh_port)"
+    [[ "$dotnet" == "yes" ]] && printf "%s\n" "- .NET installed"
+    printf "%s\n" "- Game binaries installed"
     
-    # Offer to display server information
-    printf "\n${YELLOW}Do you want to see server information? (Y/n)${NC} "
-    read -r show_info
-    if [[ $show_info =~ ^[Yy]$ ]] || [[ -z $show_info ]]; then
-        printf "\n${CYAN}Server Information:${NC}\n"
-        printf "- Installation Directory: $WORKDIR\n"
-        printf "- Server IP: $(hostname -I | awk '{print $1}')\n"
-        # Add more relevant server information here
-    fi
+    # Display server information directly without asking
+    printf "\n${CYAN}Server Information:${NC}\n"
+    printf "- Installation Directory: $WORKDIR\n"
+    printf "- Server IP: $(hostname -I | awk '{print $1}')\n"
+    # Add more relevant server information here
     
     # Wait for user acknowledgment
     printf "\nPress any key to exit..."
