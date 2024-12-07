@@ -2,9 +2,9 @@
 
 # File: disable-32bit.sh
 # Description: Script to disable 32-bit architecture support
-# Version: 3.0.1
+# Version: 3.1.1
 # Author: Sterbweise
-# Last Updated: 01/09/2024
+# Last Updated: 07/12/2024
 
 # Import global configurations
 if [ "$1" = "--disable" ]; then

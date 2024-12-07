@@ -18,4 +18,4 @@ RUN mv .config/utility/dev/testsValidation.sh .
 RUN chmod +x testsValidation.sh
 
 # Run tests when container starts
-CMD ["./testsValidation.sh"]
+CMD ["bash", "-c", "./testsValidation.sh"]

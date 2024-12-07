@@ -1,9 +1,9 @@
 #!/bin/bash
 
 # en.sh - English Language File for Plutonium Call of Duty: Black Ops II Server
-# Version: 2.1.0
+# Version: 3.1.1
 # Author: Sterbweise
-# Last Updated: 21/08/2024
+# Last Updated: 07/12/2024
 
 # Description:
 # This script contains all the English language strings used in the Plutonium Call of Duty: Black Ops II

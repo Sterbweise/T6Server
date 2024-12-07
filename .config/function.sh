@@ -2,9 +2,9 @@
 
 # File: function.sh
 # Description: Script to import all function files from the .config directory and its subdirectories
-# Version: 1.0.0
+# Version: 3.1.1
 # Author: Your Name
-# Last Updated: 01/09/2024
+# Last Updated: 07/12/2024
 
 # Function to import all function files
 importFunctions() {
@@ -14,6 +14,10 @@ importFunctions() {
 
     while IFS= read -r -d '' func_file; do
         local rel_path="${func_file#$SCRIPT_DIR/}"
+        # Skip files in the dev directory
+        if [[ "$rel_path" =~ ^utility/dev/ ]]; then
+            continue
+        fi
         if [[ "$rel_path" != "$current_file" && -z "${imported[$rel_path]}" ]]; then
             if [[ "$1" == "--debug" ]]; then
                 echo "Importing: $rel_path"  # Debug output

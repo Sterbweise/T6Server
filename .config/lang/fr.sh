@@ -1,9 +1,9 @@
 #!/bin/bash
 
 # fr.sh - Fichier de langue française pour le serveur Plutonium Call of Duty: Black Ops II
-# Version: 2.1.0
+# Version: 3.1.1
 # Auteur: Sterbweise
-# Dernière mise à jour: 21/08/2024
+# Dernière mise à jour: 07/12/2024
 
 # Description:
 # Ce script contient toutes les chaînes de caractères en français utilisées dans les scripts

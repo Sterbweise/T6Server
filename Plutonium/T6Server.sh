@@ -1,9 +1,9 @@
 #!/bin/bash
 
 # T6Server.sh - Plutonium Call of Duty: Black Ops II Server Script
-# Version: 3.0.1
+# Version: 3.1.1
 # Author: Sterbweise
-# Last Updated: 01/09/2024
+# Last Updated: 07/12/2024
 
 # Description:
 # This script is designed to run and manage a dedicated server for Call of Duty: Black Ops II
