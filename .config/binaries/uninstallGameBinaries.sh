@@ -29,8 +29,8 @@ uninstallGameBinaries () {
               "$WORKDIR/Server/Multiplayer/zone"
 
         # Remove the Resources directory if it exists
-        if [ -d "$WORKDIR/Ressources" ]; then
-            rm -rf "$WORKDIR/Ressources"
+        if [ -d "$WORKDIR/Resources" ]; then
+            rm -rf "$WORKDIR/Resources"
         fi
 
         # Remove the entire WORKDIR if it's empty
