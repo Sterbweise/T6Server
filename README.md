@@ -152,6 +152,8 @@ After installation, the primary configuration file to modify is `/opt/T6Server/T
 | CONFIG_FILE | Server configuration file (mode-specific)             | "dedicated.cfg"            |
 | SERVER_PORT | UDP port your server will listen on                   | 4976                       |
 | GAME_MODE   | Game mode selection ("t6mp" or "t6zm")                | "t6mp"                     |
+| MOD         | Path to your MOD directory (optional)                 | ""                         |
+| ADDITIONAL_PARAMS | Additional parameters for the server (optional) | ""                         |
 
 To configure your server:
 

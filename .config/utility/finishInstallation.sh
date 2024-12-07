@@ -10,23 +10,33 @@
 
 finishInstallation() {
     showLogo
-    printf "\n${GREEN}$(getMessage "finish")${NC}\n"
-    printf "\n${YELLOW}$(getMessage "quit")${NC}\n"
+    printf "\n${GREEN}%s${NC}\n" "$(getMessage "finish")"
+    printf "\n${YELLOW}%s${NC}\n" "$(getMessage "quit")"
     
     # Display summary of installed components
-    printf "\n${CYAN}Installation Summary:${NC}\n"
-    [[ "$firewall" == "yes" ]] && printf "%s\n" "- Firewall installed (SSH port: $ssh_port)"
-    [[ "$dotnet" == "yes" ]] && printf "%s\n" "- .NET installed"
-    printf "%s\n" "- Game binaries installed"
+    printf "\n${CYAN} Installation Summary:${NC}\n"
+    
+    # Use safer variable checks and quoting
+    if [[ "$firewall" == "yes" ]]; then
+        printf " - Firewall installed (SSH port: %s)\n" "${ssh_port:-Unknown}"
+    fi
+    
+    if [[ "$dotnet" == "yes" ]]; then
+        printf " - .NET installed\n"
+    fi
+    
+    printf " - Game binaries installed\n"
     
     # Display server information directly without asking
-    printf "\n${CYAN}Server Information:${NC}\n"
-    printf "- Installation Directory: $WORKDIR\n"
-    printf "- Server IP: $(hostname -I | awk '{print $1}')\n"
-    # Add more relevant server information here
+    printf "\n${CYAN} Server Information:${NC}\n"
+    printf " - Installation Directory: %s\n" "${WORKDIR:-/opt/T6Server}"
+    
+    # Safely get server IP
+    SERVER_IP=$(hostname -I | awk '{print $1}')
+    printf " - Server IP: %s\n" "${SERVER_IP:-Unknown}"
     
     # Wait for user acknowledgment
-    printf "\nPress any key to exit..."
+    printf "\n Press any key to exit..."
     read -n 1 -s -r
     echo
     exit 0

@@ -15,6 +15,7 @@ fi
 installDotnet() {
     {
         # Check if dotnet is already installed
+        checkAndInstallCommand "wget" "wget"
         if ! command -v dotnet &> /dev/null; then
             # Try to get the package for the current distribution
             PACKAGE_URL="https://packages.microsoft.com/config/$DISTRO/$VERSION/packages-microsoft-prod.deb"

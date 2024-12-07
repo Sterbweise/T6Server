@@ -12,16 +12,18 @@ confirmInstallations() {
 
         if [[ -z "${!variable}" ]]; then
             while true; do
-                printf "\n${YELLOW}$(getMessage "$description")${NC}\n"
-                printf ">>> "
-                read -n 1 -r input
-                echo  # New line after input
-                case $input in
-                    [yYoO])
+                printf "\n${YELLOW}$(getMessage "$description") ${NC}"
+                read -r input
+
+                # Convertir l'entrée en minuscules, gérer l'entrée vide
+                input=$(echo "$input" | tr '[:upper:]' '[:lower:]')
+
+                case "$input" in
+                    "" | "o" | "oui" | "y" | "yes")
                         declare "$variable=yes"
                         break
                         ;;
-                    [nN])
+                    "n" | "non" | "no")
                         declare "$variable=no"
                         break
                         ;;
@@ -40,7 +42,16 @@ confirmInstallations() {
             printf "${LIGHT_RED}$(getMessage "ssh_port_enter")${NC}\n"
             printf ">>> "
             read -r ssh_port_input
-            if [[ "$ssh_port_input" =~ ^[0-9]+$ ]] && [ "$ssh_port_input" -ge 1 ] && [ "$ssh_port_input" -le 65535 ]; then
+            
+            # Validation du port plus robuste
+            if [[ -z "$ssh_port_input" ]]; then
+                echo "$(getMessage "invalid_port")"
+                continue
+            fi
+
+            if [[ "$ssh_port_input" =~ ^[1-9][0-9]{0,4}$ ]] && 
+               [ "$ssh_port_input" -ge 1 ] && 
+               [ "$ssh_port_input" -le 65535 ]; then
                 ssh_port=$ssh_port_input
                 break
             else

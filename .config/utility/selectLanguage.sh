@@ -4,7 +4,9 @@ selectLanguage() {
     while true; do
         printf "${YELLOW}$(getMessage "selectLanguage")${NC}\n"
         printf "[0] English\n"
-        printf "[1] French\n\n"
+        printf "[1] French\n"
+        printf "[2] Spanish\n"
+        printf "[3] Chinese\n\n"
         printf ">>> "
         read -n 1 -r language_input
         echo  # New line after input
@@ -17,8 +19,16 @@ selectLanguage() {
                 language=1
                 break
                 ;;
+            2)
+                language=2
+                break
+                ;;
+            3)
+                language=3
+                break
+                ;;
             *)
-                echo "Invalid input. Please enter 0 or 1."
+                echo "Invalid input. Please enter 0, 1, 2, or 3."
                 ;;
         esac
     done

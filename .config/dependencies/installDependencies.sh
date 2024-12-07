@@ -15,11 +15,25 @@ fi
 installDependencies() {
     {
         apt-get update
-        apt-get install -y sudo tar wget gnupg2 software-properties-common apt-transport-https curl \
+        # Install system utilities
+        apt-get install -y \
+            sudo \
+            aria2 \
+            tar \
+            wget \
+            gnupg2 \
+            software-properties-common \
+            apt-transport-https \
+            curl \
+            rsync
+
+        # Install required libraries
+        apt-get install -y \
             libssl1.1 \
             libcurl4 \
             libc6:i386 \
             libstdc++6:i386
+
     } > /dev/null 2>&1 &
     showProgressIndicator "$(getMessage "dependencies_install")"
     

@@ -15,6 +15,11 @@
 
 # Note: Modify the variables in this file to customize your server setup.
 
+# Set default language and locale settings
+# These ensure consistent character encoding and language behavior across the system
+export LANG=C.UTF-8
+export LC_ALL=C.UTF-8
+
 # Work directory
 # This is the base directory where the server files will be installed
 WORKDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." &> /dev/null && pwd)"
@@ -57,3 +62,13 @@ language=0    # Default language setting (0 for English)
 firewall=""   # Firewall configuration (empty string for default behavior)
 ssh_port=22   # Default SSH port
 dotnet=""     # .NET installation flag (empty string for default behavior)
+
+# Function to check and install required commands
+checkAndInstallCommand() {
+    local command=$1
+    local package=$2
+    if ! command -v "$command" &> /dev/null; then
+        printf "Installing %s...\n" "$package"
+        apt-get install -y "$package" > /dev/null 2>&1
+    fi
+}

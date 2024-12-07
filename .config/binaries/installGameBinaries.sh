@@ -14,21 +14,26 @@ fi
 # Function to install game binaries
 installGameBinaries () {
     {
-        # Create necessary directories if they don't exist
-        mkdir -p "$WORKDIR/Server/Multiplayer/main" \
-                 "$WORKDIR/Server/Multiplayer/t6/data/gamesettings" \
-                 "$WORKDIR/Server/Zombie/main" \
-                 "$WORKDIR/Server/Zombie/t6/data/gamesettings" \
-                 "$WORKDIR/Server/Multiplayer/t6/data/stats" \
-                 "$WORKDIR/Server/Multiplayer/t6/data/playlists" \
-                 "$WORKDIR/Server/Zombie/t6/data/stats" \
-                 "$WORKDIR/Server/Zombie/t6/data/playlists"
+        # Create directory structure for Multiplayer
+        mkdir -p "$WORKDIR/Server/Multiplayer/main/"{configs,scripts,mods} \
+                 "$WORKDIR/Server/Multiplayer/t6/data/"{gamesettings,playlists,stats}
 
-        # Clone T6ServerConfigs repository, overwriting if it already exists
+        # Create directory structure for Zombie
+        mkdir -p "$WORKDIR/Server/Zombie/main/"{configs,scripts,mods} \
+                 "$WORKDIR/Server/Zombie/t6/data/"{gamesettings,playlists,stats}
+
+        # Create logs directories
+        mkdir -p "$WORKDIR/logs/"{mp,zm}
+
+        # Clone T6ServerConfigs repository
         rm -rf /tmp/T6ServerConfigs
+        checkAndInstallCommand "git" "git"
         git clone https://github.com/xerxes-at/T6ServerConfigs.git /tmp/T6ServerConfigs
 
-        # Move default gamesettings files for Zombie and Multiplayer modes
+        # Install rsync if not present
+        checkAndInstallCommand "rsync" "rsync"
+
+        # Handle gamesettings defaults
         if [ -d "/tmp/T6ServerConfigs/localappdata/Plutonium/storage/t6/gamesettings/gamesettings_defaults (REFERENCE ONLY)" ]; then
             # For Zombie mode
             if [ -d "/tmp/T6ServerConfigs/localappdata/Plutonium/storage/t6/gamesettings/gamesettings_defaults (REFERENCE ONLY)/ZM" ]; then
@@ -43,18 +48,18 @@ installGameBinaries () {
             fi
         fi
 
-        # Copy files to their respective locations
-        rsync -a "/tmp/T6ServerConfigs/localappdata/Plutonium/storage/t6/dedicated.cfg" "$WORKDIR/Server/Multiplayer/main/"
-        rsync -a "/tmp/T6ServerConfigs/localappdata/Plutonium/storage/t6/restricted.cfg" "$WORKDIR/Server/Multiplayer/t6/data/"
-        rsync -a "/tmp/T6ServerConfigs/localappdata/Plutonium/storage/t6/dedicated_zm.cfg" "$WORKDIR/Server/Zombie/main/"
-        
-        # Copy MP recipes to Multiplayer t6/data directory
+        # Copy configuration files
+        rsync -a "/tmp/T6ServerConfigs/localappdata/Plutonium/storage/t6/dedicated.cfg" "$WORKDIR/Server/Multiplayer/main/configs/"
+        rsync -a "/tmp/T6ServerConfigs/localappdata/Plutonium/storage/t6/restricted.cfg" "$WORKDIR/Server/Multiplayer/t6/data/gamesettings"
+        rsync -a "/tmp/T6ServerConfigs/localappdata/Plutonium/storage/t6/dedicated_zm.cfg" "$WORKDIR/Server/Zombie/main/configs/"
+
+        # Handle MP recipes
         if [ -d "/tmp/T6ServerConfigs/localappdata/Plutonium/storage/t6/recipes/mp" ]; then
             mkdir -p "$WORKDIR/Server/Multiplayer/t6/data/recipes"
             rsync -a --delete "/tmp/T6ServerConfigs/localappdata/Plutonium/storage/t6/recipes/mp/" "$WORKDIR/Server/Multiplayer/t6/data/recipes/"
         fi
 
-        # Copy gamesettings files to their respective locations
+        # Copy gamesettings files
         for file in /tmp/T6ServerConfigs/localappdata/Plutonium/storage/t6/gamesettings/*; do
             if [[ $(basename "$file") == zm_* ]]; then
                 rsync -a "$file" "$WORKDIR/Server/Zombie/t6/data/gamesettings/"
@@ -63,35 +68,34 @@ installGameBinaries () {
             fi
         done
 
-        # Clean up
+        # Clean up T6ServerConfigs
         rm -rf /tmp/T6ServerConfigs
 
-        
-        
         # Download required files from torrent
+        checkAndInstallCommand "aria2c" "aria2"
         aria2c --dir=/tmp --seed-time=0 --select-file=$(aria2c -S pluto_t6_full_game.torrent | grep -E "zone/|codlogo.bmp|binkw32.dll" | cut -d'|' -f1 | tr '\n' ',') pluto_t6_full_game.torrent
 
-        # Create the binaries directory if it doesn't exist
+        # Move downloaded files to Resources
         mkdir -p "$WORKDIR/Ressources/binaries"
-
-        mv /tmp/pluto_t6_full_game/zone "$WORKDIR/Ressources/binaries/zone"
-        mv /tmp/pluto_t6_full_game/codlogo.bmp "$WORKDIR/Ressources/binaries/codshowLogo.bmp"
-        mv /tmp/pluto_t6_full_game/binkw32.dll "$WORKDIR/Ressources/binaries/binkw32.dll"
+        rsync -a --remove-source-files "/tmp/pluto_t6_full_game/zone" "$WORKDIR/Resources/binaries/"
+        rsync -a --remove-source-files "/tmp/pluto_t6_full_game/codlogo.bmp" "$WORKDIR/Resources/binaries/codlogo.bmp"
+        rsync -a --remove-source-files "/tmp/pluto_t6_full_game/binkw32.dll" "$WORKDIR/Resources/binaries/binkw32.dll"
 
         rm -rf /tmp/pluto_t6_full_game
 
-        # Create symbolic links to the downloaded files for both Zombie and Multiplayer
+        # Create symbolic links
         for dir in Zombie Multiplayer; do
-            ln -sfn "$WORKDIR/Ressources/zone" "$WORKDIR/Server/$dir/zone"
-            # Download and link other required files
-            ln -sfn "$WORKDIR/Ressources/binkw32.dll" "$WORKDIR/Server/$dir/binkw32.dll"
-            ln -sfn "$WORKDIR/Ressources/codshowLogo.bmp" "$WORKDIR/Server/$dir/codshowLogo.bmp"
+            ln -sfn "$WORKDIR/Resources/binaries/zone" "$WORKDIR/Server/$dir/zone"
+            ln -sfn "$WORKDIR/Resources/binaries/binkw32.dll" "$WORKDIR/Server/$dir/binkw32.dll"
+            ln -sfn "$WORKDIR/Resources/binaries/codlogo.bmp" "$WORKDIR/Server/$dir/codlogo.bmp"
         done
 
-        # Download and extract plutonium-updater if not already present
+        # Setup Plutonium updater
         if [ ! -f "$WORKDIR/Plutonium/plutonium-updater" ]; then
             cd "$WORKDIR/Plutonium/" || exit
+            checkAndInstallCommand "wget" "wget"
             wget -q -O plutonium-updater.tar.gz https://github.com/mxve/plutonium-updater.rs/releases/latest/download/plutonium-updater-x86_64-unknown-linux-gnu.tar.gz
+            checkAndInstallCommand "tar" "tar"
             tar xf plutonium-updater.tar.gz plutonium-updater
             rm plutonium-updater.tar.gz
             chmod +x plutonium-updater
