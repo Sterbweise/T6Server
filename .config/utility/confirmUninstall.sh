@@ -17,7 +17,7 @@ confirmUninstall() {
         printf "${RED}[6] $(getMessage "uninstall_selected")${NC}\n"
         printf "[0] $(getMessage "cancel")\n\n"
         printf "$(getMessage "select_option") "
-        read -n 1 -r option
+        read -r option
         echo  # New line after input
         case $option in
             1)

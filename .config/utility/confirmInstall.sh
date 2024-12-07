@@ -10,6 +10,8 @@ confirmInstallations() {
         local description="${descriptions[$i]}"
         local variable="${variables[$i]}"
 
+        # Reset terminal settings to a sane state to ensure proper input handling
+        stty sane
         if [[ -z "${!variable}" ]]; then
             while true; do
                 printf "\n${YELLOW}$(getMessage "$description") ${NC}"

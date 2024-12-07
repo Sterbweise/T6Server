@@ -1,6 +1,8 @@
 # Function to select the language
 # This allows users to choose their preferred language for script messages
 selectLanguage() {
+    # Reset terminal settings to a sane state to ensure proper input handling
+    stty sane
     while true; do
         printf "${YELLOW}$(getMessage "selectLanguage")${NC}\n"
         printf "[0] English\n"
@@ -8,7 +10,7 @@ selectLanguage() {
         printf "[2] Spanish\n"
         printf "[3] Chinese\n\n"
         printf ">>> "
-        read -n 1 -r language_input
+        read -r language_input
         echo  # New line after input
         case $language_input in
             0)

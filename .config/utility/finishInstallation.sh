@@ -37,7 +37,7 @@ finishInstallation() {
     
     # Wait for user acknowledgment
     printf "\n Press any key to exit..."
-    read -n 1 -s -r
+    read -r 
     echo
     exit 0
 }
