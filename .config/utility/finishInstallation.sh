@@ -17,24 +17,24 @@ finishInstallation() {
     printf "\n${CYAN} Installation Summary:${NC}\n"
     
     if command -v ufw &> /dev/null ; then
-        printf " ${GREEN}⬤${NC} Firewall installed (SSH port: %s)\n" "${ssh_port:-22}"
+        printf " - ${GREEN}✓${NC} Firewall installed (SSH port: %s)\n" "${ssh_port:-22}"
     else
-        printf " ${RED}⬤${NC} Firewall not installed (${ORANGE}Optional${NC})\n"
+        printf " - ${RED}✕${NC} Firewall not installed (${ORANGE}Optional${NC})\n"
     fi
     
     if command -v dotnet &> /dev/null ; then
-        printf " ${GREEN}⬤${NC} .NET Framework installed\n"
+        printf " - ${GREEN}✓${NC} .NET Framework installed\n"
     else
-        printf " ${RED}⬤${NC} .NET Framework not installed (${ORANGE}Optional${NC})\n"
+        printf " - ${RED}✕${NC} .NET Framework not installed (${ORANGE}Optional${NC})\n"
     fi
-    
-    printf " ${GREEN}⬤${NC} Game binaries installed\n"
     
     if command -v wine &> /dev/null ; then
-        printf " ${GREEN}⬤${NC} Wine installed\n"
+        printf " - ${GREEN}✓${NC} Wine installed\n"
     else
-        printf " ${RED}⬤${NC} Wine not installed (${ORANGE}Optional${NC})\n"
+        printf " - ${RED}✕${NC} Wine not installed (${ORANGE}Optional${NC})\n"
     fi
+
+    printf " - ${GREEN}✓${NC} Game binaries installed\n"
     
     # Display server information directly without asking
     printf "\n${CYAN} Server Information:${NC}\n"
@@ -69,7 +69,7 @@ finishInstallation() {
     fi
     
     # Wait for user acknowledgment
-    printf "\n Press any key to exit..."
+    printf "\n${YELLOW}Press any key to exit...${NC}"
     stty sane
     read -r 
     echo

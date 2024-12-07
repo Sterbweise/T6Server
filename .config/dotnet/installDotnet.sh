@@ -91,8 +91,10 @@ installDotnet() {
             exit 1
         fi
     fi
-
-    printf "${GREEN}Success:${NC} .NET has been installed.\n"
+    
+    if [ "$1" = "--install" ]; then
+        printf "${GREEN}Success:${NC} .NET has been installed.\n"
+    fi
 }
 
 # Run the installation function if --install or --import is provided

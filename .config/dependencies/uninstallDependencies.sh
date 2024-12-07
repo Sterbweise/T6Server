@@ -33,7 +33,9 @@ uninstallDependencies() {
             printf "${GREEN}Success:${NC} Dependencies have been manually removed.\n"
         fi
     else
-        printf "${GREEN}Success:${NC} Dependencies have been uninstalled.\n"
+        if [ "$1" = "--uninstall" ]; then
+            printf "${GREEN}Success:${NC} Dependencies have been uninstalled.\n"
+        fi
     fi
 }
 

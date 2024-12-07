@@ -33,7 +33,9 @@ disable32BitPackages() {
         fi
     fi
 
-    printf "${GREEN}Success:${NC} 32-bit architecture support has been disabled.\n"
+    if [ "$1" = "--disable" ]; then
+        printf "${GREEN}Success:${NC} 32-bit architecture support has been disabled.\n"
+    fi
 }
 
 # Run the disable function if --disable is provided

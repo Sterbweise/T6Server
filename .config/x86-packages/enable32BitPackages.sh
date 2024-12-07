@@ -33,7 +33,9 @@ enable32BitPackages() {
         fi
     fi
 
-    printf "${GREEN}Success:${NC} 32-bit architecture support has been enabled.\n"
+    if [ "$1" = "--enable" ]; then
+        printf "${GREEN}Success:${NC} 32-bit architecture support has been enabled.\n"
+    fi
 }
 
 # Run the enable function if --enable is provided

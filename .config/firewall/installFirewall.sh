@@ -54,7 +54,9 @@ installFirewall() {
         fi
     fi
 
-    printf "${GREEN}Success:${NC} Firewall has been installed and configured.\n"
+    if [ "$1" = "--install" ]; then
+        printf "${GREEN}Success:${NC} Firewall has been installed and configured.\n"
+    fi
 }
 
 # Run the installation function if --install or --import is provided

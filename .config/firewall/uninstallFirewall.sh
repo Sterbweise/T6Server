@@ -43,7 +43,9 @@ uninstallFirewall() {
         fi
     fi
 
-    printf "${GREEN}Success:${NC} Firewall has been uninstalled.\n"
+    if [ "$1" = "--uninstall" ]; then
+        printf "${GREEN}Success:${NC} Firewall has been uninstalled.\n"
+    fi
 }
 
 # Run the uninstallation function if --uninstall is provided

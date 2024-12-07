@@ -73,13 +73,15 @@ installGameBinaries () {
 
         # Download required files from torrent
         checkAndInstallCommand "aria2c" "aria2"
-        aria2c --dir=/tmp --seed-time=0 --select-file=$(aria2c -S "$WORKDIR/Ressources/sources/pluto_t6_full_game.torrent" | grep -E "zone/|codlogo.bmp|binkw32.dll" | cut -d'|' -f1 | tr '\n' ',') "$WORKDIR/Ressources/sources/pluto_t6_full_game.torrent"
+        # Clean up any existing pluto_t6_full_game files/directories in /tmp
+        rm -rf /tmp/pluto_t6_full_game*
+        aria2c --dir=/tmp --seed-time=0 --console-log-level=error --summary-interval=1 --select-file=$(aria2c -S "$WORKDIR/Ressources/sources/pluto_t6_full_game.torrent" | grep -E "zone/|codlogo.bmp|binkw32.dll" | cut -d'|' -f1 | tr '\n' ',') "$WORKDIR/Ressources/sources/pluto_t6_full_game.torrent"
 
         # Move downloaded files to Resources
         mkdir -p "$WORKDIR/Ressources/binaries"
-        rsync -a --remove-source-files "/tmp/pluto_t6_full_game/zone" "$WORKDIR/Resources/binaries/"
-        rsync -a --remove-source-files "/tmp/pluto_t6_full_game/codlogo.bmp" "$WORKDIR/Resources/binaries/codlogo.bmp"
-        rsync -a --remove-source-files "/tmp/pluto_t6_full_game/binkw32.dll" "$WORKDIR/Resources/binaries/binkw32.dll"
+        rsync -a "/tmp/pluto_t6_full_game/zone" "$WORKDIR/Resources/binaries/"
+        rsync -a "/tmp/pluto_t6_full_game/codlogo.bmp" "$WORKDIR/Resources/binaries/codlogo.bmp"
+        rsync -a "/tmp/pluto_t6_full_game/binkw32.dll" "$WORKDIR/Resources/binaries/binkw32.dll"
 
         rm -rf /tmp/pluto_t6_full_game
 
