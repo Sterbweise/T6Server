@@ -3,7 +3,7 @@
 # File: function.sh
 # Description: Script to import all function files from the .config directory and its subdirectories
 # Version: 3.1.1
-# Author: Your Name
+# Author: Sterbweise
 # Last Updated: 07/12/2024
 
 # Function to import all function files
