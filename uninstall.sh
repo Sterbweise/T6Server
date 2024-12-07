@@ -19,7 +19,7 @@
 # These files contain necessary variables and functions used throughout the script
 DEFAULT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)"
 source "$DEFAULT_DIR/.config/config.sh"
-source "$DEFAULT_DIR/.config/function.sh --debug"
+source "$DEFAULT_DIR/.config/function.sh" --debug
 
 # Check for sudo permissions
 # The script requires elevated privileges to perform system-wide changes

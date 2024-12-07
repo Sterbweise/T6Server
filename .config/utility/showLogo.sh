@@ -22,9 +22,9 @@ showLogo() {
     ${NC}
       ╔═══════════════════════════════════════════════════════════════════════════╗
       ║  ${RED}Name:${GREY} T6 Server Installer${NC}                                                ║
-      ║  ${YELLOW}Version:${GREY} 2.1.0${NC}                                                           ║
+      ║  ${YELLOW}Version:${GREY} 3.0.1${NC}                                                           ║
       ║  ${PURPLE}Author:${GREY} Sterbweise${NC}                                                       ║
-      ║  ${GREEN}Last Updated:${GREY} 21/08/2024${NC}                                                 ║
+      ║  ${GREEN}Last Updated:${GREY} 07/12/2024${NC}                                                 ║
       ╠═══════════════════════════════════════════════════════════════════════════╣
       ║                       ${LIGHT_BLUE}\e]8;;https://github.com/Sterbweise\aGithub\e]8;;\a${NC} | ${RED}\e]8;;https://youtube.com/@Sterbweise\aYoutube\e]8;;\a${NC} | ${ORANGE}\e]8;;https://plutonium.pw\aPlutonium\e]8;;\a${NC}                        ║
       ╚═══════════════════════════════════════════════════════════════════════════╝\n\n"
