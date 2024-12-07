@@ -73,7 +73,7 @@ installGameBinaries () {
 
         # Download required files from torrent
         checkAndInstallCommand "aria2c" "aria2"
-        aria2c --dir=/tmp --seed-time=0 --select-file=$(aria2c -S pluto_t6_full_game.torrent | grep -E "zone/|codlogo.bmp|binkw32.dll" | cut -d'|' -f1 | tr '\n' ',') pluto_t6_full_game.torrent
+        aria2c --dir=/tmp --seed-time=0 --select-file=$(aria2c -S "$WORKDIR/Ressources/sources/pluto_t6_full_game.torrent" | grep -E "zone/|codlogo.bmp|binkw32.dll" | cut -d'|' -f1 | tr '\n' ',') "$WORKDIR/Ressources/sources/pluto_t6_full_game.torrent"
 
         # Move downloaded files to Resources
         mkdir -p "$WORKDIR/Ressources/binaries"
