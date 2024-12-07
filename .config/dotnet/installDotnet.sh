@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# File: dotnet-install.sh
+# File: installDotnet.sh
 # Description: Script to install .NET for the Plutonium Call of Duty: Black Ops II Server
 # Version: 3.1.1
 # Author: Sterbweise
@@ -91,7 +91,7 @@ installDotnet() {
             exit 1
         fi
     fi
-    
+
     if [ "$1" = "--install" ]; then
         printf "${GREEN}Success:${NC} .NET has been installed.\n"
     fi

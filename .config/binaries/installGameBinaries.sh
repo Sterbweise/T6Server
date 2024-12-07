@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# File: game-binaries-install.sh
+# File: installGameBinaries.sh
 # Description: Script to install game binaries for the Plutonium Call of Duty: Black Ops II Server
 # Version: 3.1.1
 # Author: Sterbweise
@@ -14,13 +14,14 @@ fi
 # Function to install game binaries
 installGameBinaries () {
     {
+        # Create directory structure for Plutonium
+        mkdir -p "$WORKDIR/Server/Plutonium/storage/t6/"{gamesettings,playlists,stats}
+
         # Create directory structure for Multiplayer
-        mkdir -p "$WORKDIR/Server/Multiplayer/main/"{configs,scripts,mods} \
-                 "$WORKDIR/Server/Multiplayer/t6/data/"{gamesettings,playlists,stats}
+        mkdir -p "$WORKDIR/Server/Multiplayer/main/"{configs,scripts,mods}
 
         # Create directory structure for Zombie
-        mkdir -p "$WORKDIR/Server/Zombie/main/"{configs,scripts,mods} \
-                 "$WORKDIR/Server/Zombie/t6/data/"{gamesettings,playlists,stats}
+        mkdir -p "$WORKDIR/Server/Zombie/main/"{configs,scripts,mods}
 
         # Create logs directories
         mkdir -p "$WORKDIR/logs/"{mp,zm}
@@ -35,37 +36,24 @@ installGameBinaries () {
 
         # Handle gamesettings defaults
         if [ -d "/tmp/T6ServerConfigs/localappdata/Plutonium/storage/t6/gamesettings/gamesettings_defaults (REFERENCE ONLY)" ]; then
-            # For Zombie mode
-            if [ -d "/tmp/T6ServerConfigs/localappdata/Plutonium/storage/t6/gamesettings/gamesettings_defaults (REFERENCE ONLY)/ZM" ]; then
-                mkdir -p "$WORKDIR/Server/Zombie/t6/data/gamesettings/default"
-                rsync -a --delete "/tmp/T6ServerConfigs/localappdata/Plutonium/storage/t6/gamesettings/gamesettings_defaults (REFERENCE ONLY)/ZM/" "$WORKDIR/Server/Zombie/t6/data/gamesettings/default/"
-            fi
-
-            # For Multiplayer mode
-            if [ -d "/tmp/T6ServerConfigs/localappdata/Plutonium/storage/t6/gamesettings/gamesettings_defaults (REFERENCE ONLY)/MP" ]; then
-                mkdir -p "$WORKDIR/Server/Multiplayer/t6/data/gamesettings/default"
-                rsync -a --delete "/tmp/T6ServerConfigs/localappdata/Plutonium/storage/t6/gamesettings/gamesettings_defaults (REFERENCE ONLY)/MP/" "$WORKDIR/Server/Multiplayer/t6/data/gamesettings/default/"
-            fi
+            mkdir -p "$WORKDIR/Server/Plutonium/storage/t6/gamesettings/default"
+            rsync -a --delete "/tmp/T6ServerConfigs/localappdata/Plutonium/storage/t6/gamesettings/gamesettings_defaults (REFERENCE ONLY)/MP/" "$WORKDIR/Server/Multiplayer/t6/gamesettings/default/"
         fi
 
         # Copy configuration files
-        rsync -a "/tmp/T6ServerConfigs/localappdata/Plutonium/storage/t6/dedicated.cfg" "$WORKDIR/Server/Multiplayer/main/configs/"
-        rsync -a "/tmp/T6ServerConfigs/localappdata/Plutonium/storage/t6/restricted.cfg" "$WORKDIR/Server/Multiplayer/t6/data/gamesettings"
-        rsync -a "/tmp/T6ServerConfigs/localappdata/Plutonium/storage/t6/dedicated_zm.cfg" "$WORKDIR/Server/Zombie/main/configs/"
+        rsync -a "/tmp/T6ServerConfigs/localappdata/Plutonium/storage/t6/dedicated.cfg" "$WORKDIR/Server/Multiplayer/main"
+        rsync -a "/tmp/T6ServerConfigs/localappdata/Plutonium/storage/t6/restricted.cfg" "$WORKDIR/Server/Multiplayer/main/config"
+        rsync -a "/tmp/T6ServerConfigs/localappdata/Plutonium/storage/t6/dedicated_zm.cfg" "$WORKDIR/Server/Zombie/main"
 
         # Handle MP recipes
         if [ -d "/tmp/T6ServerConfigs/localappdata/Plutonium/storage/t6/recipes/mp" ]; then
-            mkdir -p "$WORKDIR/Server/Multiplayer/t6/data/recipes"
-            rsync -a --delete "/tmp/T6ServerConfigs/localappdata/Plutonium/storage/t6/recipes/mp/" "$WORKDIR/Server/Multiplayer/t6/data/recipes/"
+            mkdir -p "$WORKDIR/Server/Plutonium/storage/t6/recipes"
+            rsync -a --delete "/tmp/T6ServerConfigs/localappdata/Plutonium/storage/t6/recipes/mp/" "$WORKDIR/Server/Plutonium/storage/t6/data/recipes/"
         fi
 
         # Copy gamesettings files
         for file in /tmp/T6ServerConfigs/localappdata/Plutonium/storage/t6/gamesettings/*; do
-            if [[ $(basename "$file") == zm_* ]]; then
-                rsync -a "$file" "$WORKDIR/Server/Zombie/t6/data/gamesettings/"
-            else
-                rsync -a "$file" "$WORKDIR/Server/Multiplayer/t6/data/gamesettings/"
-            fi
+            rsync -a "$file" "$WORKDIR/Server/Plutonium/storage/t6/gamesettings/"
         done
 
         # Clean up T6ServerConfigs
@@ -75,12 +63,11 @@ installGameBinaries () {
         checkAndInstallCommand "aria2c" "aria2"
         # Clean up any existing pluto_t6_full_game files/directories in /tmp
         rm -rf /tmp/pluto_t6_full_game*
-        aria2c --dir=/tmp --seed-time=0 --console-log-level=error --summary-interval=1 --select-file=$(aria2c -S "$WORKDIR/Resources/sources/pluto_t6_full_game.torrent" | grep -E "zone/|codlogo.bmp|binkw32.dll" | cut -d'|' -f1 | tr '\n' ',') "$WORKDIR/Resources/sources/pluto_t6_full_game.torrent"
+        aria2c --dir=/tmp --seed-time=0 --console-log-level=error --summary-interval=1 --select-file=$(aria2c -S "$WORKDIR/Resources/sources/pluto_t6_full_game.torrent" | grep -E "zone/|binkw32.dll" | cut -d'|' -f1 | tr '\n' ',') "$WORKDIR/Resources/sources/pluto_t6_full_game.torrent"
 
         # Move downloaded files to Resources
         mkdir -p "$WORKDIR/Resources/binaries"
         rsync -a "/tmp/pluto_t6_full_game/zone" "$WORKDIR/Resources/binaries/"
-        rsync -a "/tmp/pluto_t6_full_game/codlogo.bmp" "$WORKDIR/Resources/binaries/codlogo.bmp"
         rsync -a "/tmp/pluto_t6_full_game/binkw32.dll" "$WORKDIR/Resources/binaries/binkw32.dll"
 
         # Clean up downloaded files
@@ -90,7 +77,6 @@ installGameBinaries () {
         for dir in Zombie Multiplayer; do
             ln -sfn "$WORKDIR/Resources/binaries/zone" "$WORKDIR/Server/$dir/zone"
             ln -sfn "$WORKDIR/Resources/binaries/binkw32.dll" "$WORKDIR/Server/$dir/binkw32.dll"
-            ln -sfn "$WORKDIR/Resources/binaries/codlogo.bmp" "$WORKDIR/Server/$dir/codlogo.bmp"
         done
 
         # Setup Plutonium updater

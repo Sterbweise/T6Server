@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# File: dependencies-install.sh
+# File: installDependencies.sh
 # Description: Script to install dependencies for the Plutonium Call of Duty: Black Ops II Server
 # Version: 3.1.1
 # Author: Sterbweise

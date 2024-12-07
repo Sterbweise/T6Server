@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # uninstall.sh - Plutonium Call of Duty: Black Ops II Server Uninstallation Script
-# Version: 3.0.1
+# Version: 3.1.1
 # Author: Sterbweise
 # Last Updated: 01/09/2024
 

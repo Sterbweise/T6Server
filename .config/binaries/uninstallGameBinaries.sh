@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# File: game-binaries-uninstall.sh
+# File: uninstallGameBinaries.sh
 # Description: Script to uninstall game binaries for the Plutonium Call of Duty: Black Ops II Server
 # Version: 3.1.1
 # Author: Sterbweise

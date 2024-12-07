@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# File: firewall-uninstall.sh
+# File: uninstallFirewall.sh
 # Description: Script to uninstall firewall for the Plutonium Call of Duty: Black Ops II Server
 # Version: 3.1.1
 # Author: Sterbweise

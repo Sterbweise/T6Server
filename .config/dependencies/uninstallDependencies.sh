@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# File: dependencies-uninstall.sh
+# File: uninstallDependencies.sh
 # Description: Script to uninstall dependencies for the Plutonium Call of Duty: Black Ops II Server
 # Version: 3.1.1
 # Author: Sterbweise

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# File: disable-32bit.sh
+# File: disable32BitPackages.sh
 # Description: Script to disable 32-bit architecture support
 # Version: 3.1.1
 # Author: Sterbweise

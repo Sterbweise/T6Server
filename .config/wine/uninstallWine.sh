@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# File: wine-uninstall.sh
+# File: uninstallWine.sh
 # Description: Script to uninstall Wine for the Plutonium Call of Duty: Black Ops II Server
 # Version: 3.1.1
 # Author: Sterbweise

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# File: enable-32bit.sh
+# File: enable32BitPackages.sh
 # Description: Script to enable 32-bit architecture support
 # Version: 3.1.1
 # Author: Sterbweise

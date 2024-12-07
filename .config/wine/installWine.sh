@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# File: wine-install.sh
+# File: installWine.sh
 # Description: Script to install and configure Wine for the Plutonium Call of Duty: Black Ops II Server
 # Version: 3.1.1
 # Author: Sterbweise

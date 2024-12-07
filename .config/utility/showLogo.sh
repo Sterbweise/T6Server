@@ -22,7 +22,7 @@ showLogo() {
     ${NC}
       ╔═══════════════════════════════════════════════════════════════════════════╗
       ║  ${RED}Name:${GREY} T6 Server Installer${NC}                                                ║
-      ║  ${YELLOW}Version:${GREY} 3.0.1${NC}                                                           ║
+      ║  ${YELLOW}Version:${GREY} 3.1.1${NC}                                                           ║
       ║  ${PURPLE}Author:${GREY} Sterbweise${NC}                                                       ║
       ║  ${GREEN}Last Updated:${GREY} 07/12/2024${NC}                                                 ║
       ╠═══════════════════════════════════════════════════════════════════════════╣

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# File: firewall-install.sh
+# File: installFirewall.sh
 # Description: Script to install and configure firewall for the Plutonium Call of Duty: Black Ops II Server
 # Version: 3.1.1
 # Author: Sterbweise

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# File: dotnet-uninstall.sh
+# File: uninstallDotnet.sh
 # Description: Script to uninstall .NET for the Plutonium Call of Duty: Black Ops II Server
 # Version: 3.1.1
 # Author: Sterbweise
