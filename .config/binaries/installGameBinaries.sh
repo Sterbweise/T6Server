@@ -15,7 +15,7 @@ fi
 installGameBinaries () {
     {
         # Create directory structure for Plutonium
-        mkdir -p "$WORKDIR/Server/Plutonium/storage/t6/"{gamesettings,playlists,stats}
+        mkdir -p "$WORKDIR/Plutonium/storage/t6/"{gamesettings,playlists,stats}
 
         # Create directory structure for Multiplayer
         mkdir -p "$WORKDIR/Server/Multiplayer/main/"{configs,scripts,mods}
@@ -36,8 +36,8 @@ installGameBinaries () {
 
         # Handle gamesettings defaults
         if [ -d "/tmp/T6ServerConfigs/localappdata/Plutonium/storage/t6/gamesettings/gamesettings_defaults (REFERENCE ONLY)" ]; then
-            mkdir -p "$WORKDIR/Server/Plutonium/storage/t6/gamesettings/default"
-            rsync -a --delete "/tmp/T6ServerConfigs/localappdata/Plutonium/storage/t6/gamesettings/gamesettings_defaults (REFERENCE ONLY)/MP/" "$WORKDIR/Server/Multiplayer/t6/gamesettings/default/"
+            mkdir -p "$WORKDIR/Plutonium/storage/t6/gamesettings/default"
+            rsync -a --delete "/tmp/T6ServerConfigs/localappdata/Plutonium/storage/t6/gamesettings/gamesettings_defaults (REFERENCE ONLY)/MP/" "$WORKDIR/Plutonium/storage/t6/gamesettings/default"
         fi
 
         # Copy configuration files
@@ -47,13 +47,13 @@ installGameBinaries () {
 
         # Handle MP recipes
         if [ -d "/tmp/T6ServerConfigs/localappdata/Plutonium/storage/t6/recipes/mp" ]; then
-            mkdir -p "$WORKDIR/Server/Plutonium/storage/t6/recipes"
-            rsync -a --delete "/tmp/T6ServerConfigs/localappdata/Plutonium/storage/t6/recipes/mp/" "$WORKDIR/Server/Plutonium/storage/t6/data/recipes/"
+            mkdir -p "$WORKDIR/Plutonium/storage/t6/recipes"
+            rsync -a --delete "/tmp/T6ServerConfigs/localappdata/Plutonium/storage/t6/recipes/mp/" "$WORKDIR/Plutonium/storage/t6/data/recipes/"
         fi
 
         # Copy gamesettings files
         for file in /tmp/T6ServerConfigs/localappdata/Plutonium/storage/t6/gamesettings/*; do
-            rsync -a "$file" "$WORKDIR/Server/Plutonium/storage/t6/gamesettings/"
+            rsync -a "$file" "$WORKDIR/Plutonium/storage/t6/gamesettings/"
         done
 
         # Clean up T6ServerConfigs

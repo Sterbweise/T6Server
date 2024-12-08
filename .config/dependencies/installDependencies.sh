@@ -25,7 +25,8 @@ installDependencies() {
             software-properties-common \
             apt-transport-https \
             curl \
-            rsync
+            rsync \
+            procps
 
         # Install required libraries
         apt-get install -y \

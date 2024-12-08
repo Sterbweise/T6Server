@@ -40,8 +40,9 @@ finishInstallation() {
     printf "\n${CYAN} Server Information:${NC}\n"
     printf " - Installation Directory: %s\n" "${WORKDIR:-/opt/T6Server}"
     printf " - Operating System: %s %s\n" "${DISTRO^}" "$VERSION"
-    
+
     # Network Information
+    printf "\n${CYAN} Host Information:${NC}\n"
     LOCAL_IP=$(hostname -I | awk '{print $1}')
     PUBLIC_IP=$(curl -s --max-time 5 https://api.ipify.org || echo "Unknown")
     HOSTNAME=$(hostname)
@@ -51,6 +52,8 @@ finishInstallation() {
     printf " - Public IP: %s\n" "${PUBLIC_IP}"
     
     # System Resources
+    printf "\n${CYAN} System Resources:${NC}\n"
+    checkAndInstallCommand "free" "procps"
     TOTAL_RAM=$(free -h | awk '/^Mem:/ {print $2}')
     FREE_RAM=$(free -h | awk '/^Mem:/ {print $4}')
     CPU_INFO=$(lscpu | grep "Model name" | cut -d ':' -f2 | xargs)
