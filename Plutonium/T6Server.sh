@@ -56,7 +56,7 @@ readonly INSTALL_DIR="/opt/T6Server/Plutonium"
 # Game mod selection
 # This is the game mod that your server will run.
 # For Exemple mode, use: "mods/zm_weapons"
-#readonly MOD="mods/zm_weapons"
+readonly MOD=""
 
 # Note: To switch to Zombie mode, make the following changes:
 # 1. Set GAME_PATH to "/opt/T6Server/Server/Zombie"
