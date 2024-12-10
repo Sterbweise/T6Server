@@ -210,8 +210,8 @@ Ensure all settings are correctly configured before launching your server.
 
 To change maps:
 1. Edit the appropriate configuration file:
-   - Multiplayer: `/opt/T6Server/Server/Multiplayer/main/configs/dedicated.cfg`
-   - Zombie: `/opt/T6Server/Server/Zombie/main/configs/dedicated_zm.cfg`
+   - Multiplayer: `/opt/T6Server/Server/Multiplayer/main/dedicated.cfg`
+   - Zombie: `/opt/T6Server/Server/Zombie/main/dedicated_zm.cfg`
 
 ### File Organization
 For proper server organization, place files in these specific directories:
