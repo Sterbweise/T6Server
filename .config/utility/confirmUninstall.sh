@@ -8,13 +8,13 @@ confirmUninstall() {
     local uninstallGameBinaries =false
 
     while true; do
-        printf "${YELLOW}$(getMessage "uninstall_options")${NC}\n"
+        printf "${COLORS[YELLOW]}$(getMessage "uninstall_options")${COLORS[RESET]}\n"
         printf "[1] $(getMessage "uninstallDotnet") [%s]\n" "$(if $uninstallDotnet; then echo "Y"; else echo "N"; fi)"
         printf "[2] $(getMessage "uninstallWine") [%s]\n" "$(if $uninstallWine; then echo "Y"; else echo "N"; fi)"
         printf "[3] $(getMessage "disable_32bit") [%s]\n" "$(if $disable_32bit; then echo "Y"; else echo "N"; fi)"
         printf "[4] $(getMessage "uninstallFirewall") [%s]\n" "$(if $uninstallFirewall; then echo "Y"; else echo "N"; fi)"
         printf "[5] $(getMessage "uninstallGameBinaries ") [%s]\n" "$(if $uninstallGameBinaries ; then echo "Y"; else echo "N"; fi)"
-        printf "${RED}[6] $(getMessage "uninstall_selected")${NC}\n"
+        printf "${COLORS[RED]}[6] $(getMessage "uninstall_selected")${COLORS[RESET]}\n"
         printf "[0] $(getMessage "cancel")\n\n"
         printf "$(getMessage "select_option") "
         read -r option
@@ -36,7 +36,7 @@ confirmUninstall() {
                 uninstallGameBinaries =!$uninstallGameBinaries 
                 ;;
             6)
-                printf "${RED}$(getMessage "confirmUninstall_selected")${NC}\n"
+                printf "${COLORS[RED]}$(getMessage "confirmUninstall_selected")${COLORS[RESET]}\n"
                 printf "$(getMessage "confirm_prompt") "
                 read -n 1 -r confirm
                 echo  # New line after input
@@ -50,7 +50,7 @@ confirmUninstall() {
                 fi
                 ;;
             0)
-                printf "${YELLOW}$(getMessage "uninstall_cancelled")${NC}\n"
+                printf "${COLORS[YELLOW]}$(getMessage "uninstall_cancelled")${COLORS[RESET]}\n"
                 exit 0
                 ;;
             *)

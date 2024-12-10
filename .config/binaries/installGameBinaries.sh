@@ -97,7 +97,7 @@ installGameBinaries () {
     
     # Verify installation
     if [ ! -f "$WORKDIR/Plutonium/plutonium-updater" ]; then
-        printf "${RED}Error:${NC} Game binaries installation failed.\n"
+        printf "${COLORS[RED]}Error:${COLORS[RESET]} Game binaries installation failed.\n"
         printf "You can try running the installation script separately by executing:\n"
         printf "cd .config/binaries && ./installGameBinaries.sh\n"
     fi

@@ -22,19 +22,19 @@ uninstallDependencies() {
     # Verify uninstallation
     if dpkg -s software-properties-common &> /dev/null || dpkg -s apt-transport-https &> /dev/null
     then
-        printf "${RED}Error:${NC} Dependencies uninstallation failed.\n"
+        printf "${COLORS[RED]}Error:${COLORS[RESET]} Dependencies uninstallation failed.\n"
         printf "Attempting manual removal...\n"
         apt-get remove -y software-properties-common apt-transport-https
         apt-get autoremove -y
         if dpkg -s software-properties-common &> /dev/null || dpkg -s apt-transport-https &> /dev/null
         then
-            printf "${RED}Error:${NC} Manual removal failed. Some dependencies may still be present.\n"
+            printf "${COLORS[RED]}Error:${COLORS[RESET]} Manual removal failed. Some dependencies may still be present.\n"
         else
-            printf "${GREEN}Success:${NC} Dependencies have been manually removed.\n"
+            printf "${COLORS[GREEN]}Success:${COLORS[RESET]} Dependencies have been manually removed.\n"
         fi
     else
         if [ "$1" = "--uninstall" ]; then
-            printf "${GREEN}Success:${NC} Dependencies have been uninstalled.\n"
+            printf "${COLORS[GREEN]}Success:${COLORS[RESET]} Dependencies have been uninstalled.\n"
         fi
     fi
 }

@@ -4,7 +4,7 @@ selectLanguage() {
     # Reset terminal settings to a sane state to ensure proper input handling
     stty sane
     while true; do
-        printf "${YELLOW}$(getMessage "selectLanguage")${NC}\n"
+        printf "${COLORS[YELLOW]}$(getMessage "selectLanguage")${COLORS[RESET]}\n"
         printf "[0] English\n"
         printf "[1] French\n"
         printf "[2] Spanish\n"

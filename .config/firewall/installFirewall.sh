@@ -36,7 +36,7 @@ installFirewall() {
     # Verify installation
     if ! command -v ufw &> /dev/null || ! command -v fail2ban-client &> /dev/null
     then
-        printf "${RED}Error:${NC} Firewall installation failed.\n"
+        printf "${COLORS[RED]}Error:${COLORS[RESET]} Firewall installation failed.\n"
         printf "Attempting reinstallation...\n"
         {
             apt install ufw fail2ban -y
@@ -49,13 +49,13 @@ installFirewall() {
         
         if ! command -v ufw &> /dev/null || ! command -v fail2ban-client &> /dev/null
         then
-            printf "${RED}Error:${NC} Reinstallation failed. Please check your internet connection and try again.\n"
+            printf "${COLORS[RED]}Error:${COLORS[RESET]} Reinstallation failed. Please check your internet connection and try again.\n"
             exit 1
         fi
     fi
 
     if [ "$1" = "--install" ]; then
-        printf "${GREEN}Success:${NC} Firewall has been installed and configured.\n"
+        printf "${COLORS[GREEN]}Success:${COLORS[RESET]} Firewall has been installed and configured.\n"
     fi
 }
 

@@ -17,7 +17,7 @@ installWine() {
         # Add Wine repository key if it doesn't exist
         if [ ! -f /etc/apt/keyrings/winehq-archive.key ]; then
             sudo mkdir -pm755 /etc/apt/keyrings
-sudo wget -O /etc/apt/keyrings/winehq-archive.key https://dl.winehq.org/wine-builds/winehq.key
+            sudo wget -O /etc/apt/keyrings/winehq-archive.key https://dl.winehq.org/wine-builds/winehq.key
         fi
 
         # Add Wine repository sources based on Debian version
@@ -72,7 +72,7 @@ sudo wget -O /etc/apt/keyrings/winehq-archive.key https://dl.winehq.org/wine-bui
     
     # Verify installation
     if ! command -v wine &> /dev/null; then
-        printf "${RED}Error:${NC} Wine installation failed.\n"
+        printf "${COLORS[RED]}Error:${COLORS[RESET]} Wine installation failed.\n"
         printf "You can try running the installation script separately by executing:\n"
         printf "cd .config/wine && ./wine-install.sh\n"
     fi

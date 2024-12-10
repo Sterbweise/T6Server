@@ -47,7 +47,7 @@ confirmUninstall
 uninstallGameBinaries   # Removes game files and directories
 uninstallDotnet         # Uninstalls .NET framework
 uninstallWine           # Removes Wine
-remove_firewall          # Reverts firewall changes made during installation
+remove_firewall         # Reverts firewall changes made during installation
 
 # Clean up
 # Removes unnecessary packages and cleans the package cache

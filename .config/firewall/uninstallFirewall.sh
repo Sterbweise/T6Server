@@ -32,19 +32,19 @@ uninstallFirewall() {
 
     # Verify uninstallation
     if command -v ufw >/dev/null 2>&1 || command -v fail2ban-client >/dev/null 2>&1; then
-        printf "${RED}Error:${NC} Firewall uninstallation failed.\n"
+        printf "${COLORS[RED]}Error:${COLORS[RESET]} Firewall uninstallation failed.\n"
         printf "Attempting manual removal...\n"
         apt-get remove --purge ufw fail2ban -y
         apt-get autoremove -y
         apt-get autoclean
         if command -v ufw >/dev/null 2>&1 || command -v fail2ban-client >/dev/null 2>&1; then
-            printf "${RED}Error:${NC} Manual removal failed. Please check your system and try again.\n"
+            printf "${COLORS[RED]}Error:${COLORS[RESET]} Manual removal failed. Please check your system and try again.\n"
             exit 1
         fi
     fi
 
     if [ "$1" = "--uninstall" ]; then
-        printf "${GREEN}Success:${NC} Firewall has been uninstalled.\n"
+        printf "${COLORS[GREEN]}Success:${COLORS[RESET]} Firewall has been uninstalled.\n"
     fi
 }
 

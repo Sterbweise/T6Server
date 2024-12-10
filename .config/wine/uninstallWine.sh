@@ -49,9 +49,9 @@ uninstallWine() {
     
     # Verify uninstallation
     if ! dpkg -l | grep -q winehq-stable; then
-        printf "${GREEN}Success:${NC} Wine has been uninstalled.\n"
+        printf "${COLORS[GREEN]}Success:${COLORS[RESET]} Wine has been uninstalled.\n"
     else
-        printf "${RED}Error:${NC} Wine uninstallation may have failed.\n"
+        printf "${COLORS[RED]}Error:${COLORS[RESET]} Wine uninstallation may have failed.\n"
         printf "You can try manually removing Wine using:\n"
         printf "sudo apt-get remove --purge winehq-stable\n"
     fi

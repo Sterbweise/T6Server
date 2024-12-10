@@ -59,7 +59,7 @@ installDotnet() {
                     apt-get install -y aspnetcore-runtime-7.0
                 fi
             else
-                printf "${RED}Error:${NC} Unsupported Debian version.\n"
+                printf "${COLORS[RED]}Error:${COLORS[RESET]} Unsupported Debian version.\n"
                 exit 1
             fi
 
@@ -73,7 +73,7 @@ installDotnet() {
     # Verify installation
     if ! command -v dotnet &> /dev/null
     then
-        printf "${RED}Error:${NC} Dotnet installation failed.\n"
+        printf "${COLORS[RED]}Error:${COLORS[RESET]} Dotnet installation failed.\n"
         printf "Attempting reinstallation...\n"
         if [ "$VERSION_ID" = "12" ]; then
             apt-get install -y aspnetcore-runtime-8.0
@@ -82,18 +82,18 @@ installDotnet() {
         elif [ "$VERSION_ID" = "10" ]; then
             apt-get install -y aspnetcore-runtime-7.0
         else
-            printf "${RED}Error:${NC} Unsupported Debian version.\n"
+            printf "${COLORS[RED]}Error:${COLORS[RESET]} Unsupported Debian version.\n"
             exit 1
         fi
         if ! command -v dotnet &> /dev/null
         then
-            printf "${RED}Error:${NC} Reinstallation failed. Please check your internet connection and try again.\n"
+            printf "${COLORS[RED]}Error:${COLORS[RESET]} Reinstallation failed. Please check your internet connection and try again.\n"
             exit 1
         fi
     fi
 
     if [ "$1" = "--install" ]; then
-        printf "${GREEN}Success:${NC} .NET has been installed.\n"
+        printf "${COLORS[GREEN]}Success:${COLORS[RESET]} .NET has been installed.\n"
     fi
 }
 

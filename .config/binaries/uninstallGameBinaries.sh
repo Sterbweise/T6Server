@@ -43,9 +43,9 @@ uninstallGameBinaries () {
     
     # Verify uninstallation
     if [ ! -d "$WORKDIR/Server" ] && [ ! -d "$WORKDIR/Plutonium" ]; then
-        printf "${GREEN}Success:${NC} Game binaries have been uninstalled.\n"
+        printf "${COLORS[GREEN]}Success:${COLORS[RESET]} Game binaries have been uninstalled.\n"
     else
-        printf "${RED}Error:${NC} Game binaries uninstallation may have failed.\n"
+        printf "${COLORS[RED]}Error:${COLORS[RESET]} Game binaries uninstallation may have failed.\n"
         printf "You can try manually removing the directories:\n"
         printf "$WORKDIR/Server\n"
         printf "$WORKDIR/Plutonium\n"

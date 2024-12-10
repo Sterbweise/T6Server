@@ -10,39 +10,39 @@
 
 finishInstallation() {
     showLogo
-    printf "\n${GREEN}%s${NC}\n" "$(getMessage "finish")"
-    printf "\n${YELLOW}%s${NC}\n" "$(getMessage "quit")"
+    printf "\n${COLORS[GREEN]}%s${COLORS[RESET]}\n" "$(getMessage "finish")"
+    printf "\n${COLORS[YELLOW]}%s${COLORS[RESET]}\n" "$(getMessage "quit")"
     
     # Display summary of installed components
-    printf "\n${CYAN} Installation Summary:${NC}\n"
+    printf "\n${COLORS[CYAN]} Installation Summary:${COLORS[RESET]}\n"
     
     if command -v ufw &> /dev/null ; then
-        printf " - ${GREEN}✓${NC} Firewall installed (SSH port: %s)\n" "${ssh_port:-22}"
+        printf " - ${COLORS[GREEN]}✓${COLORS[RESET]} Firewall installed (SSH port: %s)\n" "${ssh_port:-22}"
     else
-        printf " - ${RED}✕${NC} Firewall not installed (${ORANGE}Optional${NC})\n"
+        printf " - ${COLORS[RED]}✕${COLORS[RESET]} Firewall not installed (${COLORS[ORANGE]}Optional${COLORS[RESET]})\n"
     fi
     
     if command -v dotnet &> /dev/null ; then
-        printf " - ${GREEN}✓${NC} .NET Framework installed\n"
+        printf " - ${COLORS[GREEN]}✓${COLORS[RESET]} .NET Framework installed\n"
     else
-        printf " - ${RED}✕${NC} .NET Framework not installed (${ORANGE}Optional${NC})\n"
+        printf " - ${COLORS[RED]}✕${COLORS[RESET]} .NET Framework not installed (${COLORS[ORANGE]}Optional${COLORS[RESET]})\n"
     fi
     
     if command -v wine &> /dev/null ; then
-        printf " - ${GREEN}✓${NC} Wine installed\n"
+        printf " - ${COLORS[GREEN]}✓${COLORS[RESET]} Wine installed\n"
     else
-        printf " - ${RED}✕${NC} Wine not installed (${ORANGE}Optional${NC})\n"
+        printf " - ${COLORS[RED]}✕${COLORS[RESET]} Wine not installed (${COLORS[ORANGE]}Optional${COLORS[RESET]})\n"
     fi
 
-    printf " - ${GREEN}✓${NC} Game binaries installed\n"
+    printf " - ${COLORS[GREEN]}✓${COLORS[RESET]} Game binaries installed\n"
     
     # Display server information directly without asking
-    printf "\n${CYAN} Server Information:${NC}\n"
+    printf "\n${COLORS[CYAN]} Server Information:${COLORS[RESET]}\n"
     printf " - Installation Directory: %s\n" "${WORKDIR:-/opt/T6Server}"
     printf " - Operating System: %s %s\n" "${DISTRO^}" "$VERSION"
 
     # Network Information
-    printf "\n${CYAN} Host Information:${NC}\n"
+    printf "\n${COLORS[CYAN]} Host Information:${COLORS[RESET]}\n"
     LOCAL_IP=$(hostname -I | awk '{print $1}')
     PUBLIC_IP=$(curl -s --max-time 5 https://api.ipify.org || echo "Unknown")
     HOSTNAME=$(hostname)
@@ -52,7 +52,7 @@ finishInstallation() {
     printf " - Public IP: %s\n" "${PUBLIC_IP}"
     
     # System Resources
-    printf "\n${CYAN} System Resources:${NC}\n"
+    printf "\n${COLORS[CYAN]} System Resources:${COLORS[RESET]}\n"
     checkAndInstallCommand "free" "procps"
     TOTAL_RAM=$(free -h | awk '/^Mem:/ {print $2}')
     FREE_RAM=$(free -h | awk '/^Mem:/ {print $4}')
@@ -68,11 +68,11 @@ finishInstallation() {
     printf " - Network Ports Status:\n"
     if command -v netstat &> /dev/null; then
         printf "   ⚬ SSH Port (%s): %s\n" "${ssh_port:-22}" \
-            "$(netstat -tuln | grep ":${ssh_port:-22}" > /dev/null && echo "${GREEN}Open${NC}" || echo "${RED}Closed${NC}")"
+            "$(netstat -tuln | grep ":${ssh_port:-22}" > /dev/null && echo "${COLORS[GREEN]}Open${COLORS[RESET]}" || echo "${COLORS[RED]}Closed${COLORS[RESET]}")"
     fi
     
     # Wait for user acknowledgment
-    printf "\n${YELLOW}Press any key to exit...${NC}"
+    printf "\n${COLORS[YELLOW]}Press any key to exit...${COLORS[RESET]}"
     stty sane
     read -r 
     echo

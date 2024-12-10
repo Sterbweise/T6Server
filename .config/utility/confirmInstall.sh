@@ -14,7 +14,7 @@ confirmInstallations() {
         stty sane
         if [[ -z "${!variable}" ]]; then
             while true; do
-                printf "\n${YELLOW}$(getMessage "$description") ${NC}"
+                printf "\n${COLORS[YELLOW]}$(getMessage "$description") ${COLORS[RESET]}"
                 read -r input
 
                 # Convertir l'entrée en minuscules, gérer l'entrée vide
@@ -40,8 +40,8 @@ confirmInstallations() {
     # Ask for SSH port if firewall is to be installed
     if [[ "$firewall" == "yes" ]]; then
         while true; do
-            printf "\n${YELLOW}$(getMessage "ssh_port")${NC}\n"
-            printf "${LIGHT_RED}$(getMessage "ssh_port_enter")${NC}\n"
+            printf "\n${COLORS[YELLOW]}$(getMessage "ssh_port")${COLORS[RESET]}\n"
+            printf "${COLORS[LIGHT_RED]}$(getMessage "ssh_port_enter")${COLORS[RESET]}\n"
             printf ">>> "
             read -r ssh_port_input
             

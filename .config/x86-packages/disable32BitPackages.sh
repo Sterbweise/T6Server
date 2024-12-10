@@ -23,18 +23,18 @@ disable32BitPackages() {
     
     # Verify removal
     if dpkg --print-foreign-architectures | grep -q i386; then
-        printf "${RED}Error:${NC} 32-bit package deactivation failed.\n"
+        printf "${COLORS[RED]}Error:${COLORS[RESET]} 32-bit package deactivation failed.\n"
         printf "Attempting deactivation again...\n"
         dpkg --remove-architecture i386
         apt-get update -y
         if dpkg --print-foreign-architectures | grep -q i386; then
-            printf "${RED}Error:${NC} Deactivation failed. Please check your system and try again.\n"
+            printf "${COLORS[RED]}Error:${COLORS[RESET]} Deactivation failed. Please check your system and try again.\n"
             exit 1
         fi
     fi
 
     if [ "$1" = "--disable" ]; then
-        printf "${GREEN}Success:${NC} 32-bit architecture support has been disabled.\n"
+        printf "${COLORS[GREEN]}Success:${COLORS[RESET]} 32-bit architecture support has been disabled.\n"
     fi
 }
 

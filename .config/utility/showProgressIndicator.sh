@@ -29,5 +29,5 @@ showProgressIndicator() {
         tput cnorm  # Show cursor
     fi
 
-    printf "\r [${GREEN}✔${NC}] ${message} (${elapsed}s)\n"
+    printf "\r [${COLORS[GREEN]}✔${COLORS[RESET]}] ${message} (${elapsed}s)\n"
 }

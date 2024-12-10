@@ -3,29 +3,29 @@
 showLogo() {
     stty igncr
     clear
-    printf "${RED}
+    printf "${COLORS[RED]}
 
 
                                    .        ,;                            ,;           
-                ${WHITE}j,${RED}                ;W      f#i j.                        f#i j.         
- GEEEEEEEL     ${WHITE}L#,${RED}               f#E    .E#t  EW,                     .E#t  EW,        
- ,;;L#K;;.    ${WHITE}D#D${RED}              .E#f    i#W,   E##j       t      .DD. i#W,   E##j       
-    t#E     ${WHITE}.K#f${RED}              iWW;    L#D.    E###D.     EK:   ,WK. L#D.    E###D.     
-    t#E    ${WHITE}:W#i${RED}              L##Lffi:K#Wfff;  E#jG#W;    E#t  i#D :K#Wfff;  E#jG#W;    
-    t#E   ${WHITE};##Dfff.${RED}          tLLG##L i##WLLLLt E#t t##f   E#t j#f  i##WLLLLt E#t t##f   
-    t#E   ${WHITE};##${BLACK}Lt${WHITE}##,${RED}            ,W#i   .E#L     E#t  :K#E: E#tL#i    .E#L     E#t  :K#E: 
-    t#E    ${WHITE}:W#;##,${RED}           j#E.      f#E:   E#KDDDD###iE#WW,       f#E:   E#KDDDD###i
-    t#E     ${WHITE}.E###,${RED}         .D#j         ,WW;  E#f,t#Wi,,,E#K:         ,WW;  E#f,t#Wi,,,
-    t#E       ${WHITE}G##,${RED}        ,WK,           .D#; E#t  ;#W:  ED.           .D#; E#t  ;#W:  
-     fE        ${WHITE}f#,${RED}        EG.              tt DWi   ,KK: t               tt DWi   ,KK: 
-      :         ${WHITE}t:${RED}        ,                                                            
-    ${NC}
+                ${COLORS[WHITE]}j,${COLORS[RED]}                ;W      f#i j.                        f#i j.         
+ GEEEEEEEL     ${COLORS[WHITE]}L#,${COLORS[RED]}               f#E    .E#t  EW,                     .E#t  EW,        
+ ,;;L#K;;.    ${COLORS[WHITE]}D#D${COLORS[RED]}              .E#f    i#W,   E##j       t      .DD. i#W,   E##j       
+    t#E     ${COLORS[WHITE]}.K#f${COLORS[RED]}              iWW;    L#D.    E###D.     EK:   ,WK. L#D.    E###D.     
+    t#E    ${COLORS[WHITE]}:W#i${COLORS[RED]}              L##Lffi:K#Wfff;  E#jG#W;    E#t  i#D :K#Wfff;  E#jG#W;    
+    t#E   ${COLORS[WHITE]};##Dfff.${COLORS[RED]}          tLLG##L i##WLLLLt E#t t##f   E#t j#f  i##WLLLLt E#t t##f   
+    t#E   ${COLORS[WHITE]};##${COLORS[BLACK]}Lt${COLORS[WHITE]}##,${COLORS[RED]}            ,W#i   .E#L     E#t  :K#E: E#tL#i    .E#L     E#t  :K#E: 
+    t#E    ${COLORS[WHITE]}:W#;##,${COLORS[RED]}           j#E.      f#E:   E#KDDDD###iE#WW,       f#E:   E#KDDDD###i
+    t#E     ${COLORS[WHITE]}.E###,${COLORS[RED]}         .D#j         ,WW;  E#f,t#Wi,,,E#K:         ,WW;  E#f,t#Wi,,,
+    t#E       ${COLORS[WHITE]}G##,${COLORS[RED]}        ,WK,           .D#; E#t  ;#W:  ED.           .D#; E#t  ;#W:  
+     fE        ${COLORS[WHITE]}f#,${COLORS[RED]}        EG.              tt DWi   ,KK: t               tt DWi   ,KK: 
+      :         ${COLORS[WHITE]}t:${COLORS[RED]}        ,                                                            
+    ${COLORS[RESET]}
       ╔═══════════════════════════════════════════════════════════════════════════╗
-      ║  ${RED}Name:${GREY} T6 Server Installer${NC}                                                ║
-      ║  ${YELLOW}Version:${GREY} 3.1.1${NC}                                                           ║
-      ║  ${PURPLE}Author:${GREY} Sterbweise${NC}                                                       ║
-      ║  ${GREEN}Last Updated:${GREY} 07/12/2024${NC}                                                 ║
+      ║  ${COLORS[RED]}Name:${COLORS[GREY]} T6 Server Installer${COLORS[RESET]}                                                ║
+      ║  ${COLORS[YELLOW]}Version:${COLORS[GREY]} 3.1.1${COLORS[RESET]}                                                           ║
+      ║  ${COLORS[PURPLE]}Author:${COLORS[GREY]} Sterbweise${COLORS[RESET]}                                                       ║
+      ║  ${COLORS[GREEN]}Last Updated:${COLORS[GREY]} 07/12/2024${COLORS[RESET]}                                                 ║
       ╠═══════════════════════════════════════════════════════════════════════════╣
-      ║                       ${LIGHT_BLUE}\e]8;;https://github.com/Sterbweise\aGithub\e]8;;\a${NC} | ${RED}\e]8;;https://youtube.com/@Sterbweise\aYoutube\e]8;;\a${NC} | ${ORANGE}\e]8;;https://plutonium.pw\aPlutonium\e]8;;\a${NC}                        ║
+      ║                       ${COLORS[LIGHT_BLUE]}\e]8;;https://github.com/Sterbweise\aGithub\e]8;;\a${COLORS[RESET]} | ${COLORS[RED]}\e]8;;https://youtube.com/@Sterbweise\aYoutube\e]8;;\a${COLORS[RESET]} | ${COLORS[ORANGE]}\e]8;;https://plutonium.pw\aPlutonium\e]8;;\a${COLORS[RESET]}                        ║
       ╚═══════════════════════════════════════════════════════════════════════════╝\n\n"
 }

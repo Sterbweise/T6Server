@@ -40,9 +40,9 @@ uninstallDotnet() {
     
     # Verify uninstallation
     if ! dpkg -l | grep -qE "aspnetcore-runtime-8.0|aspnetcore-runtime-7.0"; then
-        printf "${GREEN}Success:${NC} .NET has been uninstalled.\n"
+        printf "${COLORS[GREEN]}Success:${COLORS[RESET]} .NET has been uninstalled.\n"
     else
-        printf "${RED}Error:${NC} .NET uninstallation may have failed.\n"
+        printf "${COLORS[RED]}Error:${COLORS[RESET]} .NET uninstallation may have failed.\n"
         printf "You can try manually removing .NET using:\n"
         printf "sudo apt-get remove --purge aspnetcore-runtime-8.0 aspnetcore-runtime-7.0\n"
     fi

@@ -23,18 +23,18 @@ enable32BitPackages() {
     
     # Verify installation
     if ! dpkg --print-foreign-architectures | grep -q i386; then
-        printf "${RED}Error:${NC} 32-bit package activation failed.\n"
+        printf "${COLORS[RED]}Error:${COLORS[RESET]} 32-bit package activation failed.\n"
         printf "Attempting reactivation...\n"
         dpkg --add-architecture i386
         apt-get update -y
         if ! dpkg --print-foreign-architectures | grep -q i386; then
-            printf "${RED}Error:${NC} Reactivation failed. Please check your system and try again.\n"
+            printf "${COLORS[RED]}Error:${COLORS[RESET]} Reactivation failed. Please check your system and try again.\n"
             exit 1
         fi
     fi
 
     if [ "$1" = "--enable" ]; then
-        printf "${GREEN}Success:${NC} 32-bit architecture support has been enabled.\n"
+        printf "${COLORS[GREEN]}Success:${COLORS[RESET]} 32-bit architecture support has been enabled.\n"
     fi
 }
 
