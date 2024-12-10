@@ -15,16 +15,15 @@ fi
 installGameBinaries () {
     {
         # Create directory structure for Plutonium
-        mkdir -p "$WORKDIR/Plutonium/storage/t6/"{gamesettings,playlists,stats}
+        mkdir -p "$WORKDIR/Plutonium/storage/t6/"{players,gamesettings,playlists,stats,scripts,mods}
 
         # Create directory structure for Multiplayer
-        mkdir -p "$WORKDIR/Server/Multiplayer/main/"{configs,scripts,mods}
+        mkdir -p "$WORKDIR/Server/Multiplayer/usermaps"
+        mkdir -p "$WORKDIR/Server/Multiplayer/main/"{configs}
 
         # Create directory structure for Zombie
-        mkdir -p "$WORKDIR/Server/Zombie/main/"{configs,scripts,mods}
-
-        # Create logs directories
-        mkdir -p "$WORKDIR/logs/"{mp,zm}
+        mkdir -p "$WORKDIR/Server/Zombie/usermaps"
+        mkdir -p "$WORKDIR/Server/Zombie/main/"{configs}
 
         # Clone T6ServerConfigs repository
         rm -rf /tmp/T6ServerConfigs
