@@ -59,7 +59,7 @@ showProgressIndicator "$(getMessage "cleanup")"
 
 # Display completion message
 # Informs the user that the uninstallation process is complete
-finishInstallation
+finishUninstallation
 
 # Reset terminal settings and exit
 # Ensures the terminal is left in a clean state after script execution
