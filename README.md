@@ -1,6 +1,6 @@
 # T6 Server - Plutonium Black Ops II Server Installer
 
-![Version](https://img.shields.io/badge/Version-2.1.0-blue)
+![Version](https://img.shields.io/badge/Version-3.1.1-blue)
 ![Debian](https://img.shields.io/badge/Debian-10%20%7C%2011%20%7C%2012-brightgreen?showLogo=Debian)
 ![Plutonium T6](https://img.shields.io/badge/Plutonium-T6-blue)
 ![License](https://img.shields.io/badge/License-GPL--3.0-yellow)
@@ -30,6 +30,10 @@ T6 Server is a comprehensive management suite for setting up and running Plutoni
   - [Configuration](#configuration)
     - [New Server Parameters](#new-server-parameters)
     - [Default Ports](#default-ports)
+    - [Directory Structure](#directory-structure)
+    - [File Organization](#file-organization)
+      - [Custom Mods](#custom-mods)
+      - [Custom Maps](#custom-maps)
   - [Launching the Server](#launching-the-server)
   - [Troubleshooting](#troubleshooting)
     - [Wine Display Errors](#wine-display-errors)
@@ -51,20 +55,22 @@ T6 Server is a comprehensive management suite for setting up and running Plutoni
   - [Support](#support)
 
 ## Features
-
-- Easy installation process
-- Automated system updates and dependency management
-- Firewall configuration with UFW
-- Wine installation for running Windows applications
-- .NET installation for IW4MAdmin support
-- Localization support (English and French)
+- Easy installation and uninstallation process
+- Automated system updates and dependency management 
+- Firewall configuration and management with UFW
+- Wine installation for Windows application support
+- .NET Framework installation for IW4MAdmin support
+- Multi-language support (English and French)
 - Server binary installation and configuration
 - User-friendly command-line interface
 - MOD support with custom maps and game modes
 - Advanced server configuration options
-- Automatic server restarts and maintenance
+- Automatic server monitoring and resource tracking
+- CPU and memory usage limits
+- Detailed installation/uninstallation summaries
+- System health monitoring and reporting
+- Comprehensive logging and error handling
 - Performance optimization tools
-- Detailed logging and monitoring
 
 ## Prerequisites
 
@@ -72,7 +78,7 @@ T6 Server is a comprehensive management suite for setting up and running Plutoni
 - **Operating System:** Debian 10, 11, or 12 (64-bit)
 - **Architecture:** x86_64 (AMD64)
 - **RAM:** Minimum 512MB, 2GB recommended
-- **Storage:** At least 10GB of free disk space
+- **Storage:** At least 15GB of free disk space
 
 ### Software Requirements
 - **Root Access:** Full system privileges (root or sudo)
@@ -107,27 +113,27 @@ Ensure all prerequisites are met before proceeding with the installation to guar
 
 ## Installation
 
-1. Navigate to the /opt directory:
+1. Navigate to the application installation directory:
    ```bash
    cd /opt
    ```
 
-2. Clone the repository:
+2. Download and extract T6Server archive in a single command:
    ```bash
-   git clone https://github.com/Sterbweise/T6Server.git
+   mkdir -p T6Server && wget -O T6Server.tar.gz https://github.com/Sterbweise/T6Server/releases/download/v3.1.1/T6Server.tar.gz && tar -xzvf T6Server.tar.gz -C T6Server && rm T6Server.tar.gz
    ```
 
-3. Navigate to the T6Server directory:
+3. Move into the newly created T6Server directory:
    ```bash
    cd T6Server
    ```
 
-4. Make the installation script executable:
+4. Make the script executable:
    ```bash
    chmod +x install.sh
    ```
 
-5. Run the installation script:
+5. Launch the installation script with sudo privileges:
    ```bash
    sudo ./install.sh
    ```
@@ -150,7 +156,7 @@ After installation, the primary configuration file to modify is `/opt/T6Server/T
 | GAME_PATH   | Path to your game files (Multiplayer or Zombie mode)  | "/opt/T6Server/Server/Multiplayer" |
 | SERVER_KEY  | Your unique Plutonium server key                      | "YOURKEY"                  |
 | CONFIG_FILE | Server configuration file (mode-specific)             | "dedicated.cfg"            |
-| SERVER_PORT | UDP port your server will listen on                   | 4976                       |
+| SERVER_PORT | UDP port your server will listen on                   | 21889                       |
 | GAME_MODE   | Game mode selection ("t6mp" or "t6zm")                | "t6mp"                     |
 | MOD         | Path to your MOD directory (optional)                 | ""                         |
 | ADDITIONAL_PARAMS | Additional parameters for the server (optional) | ""                         |
@@ -186,6 +192,73 @@ Ensure all settings are correctly configured before launching your server.
 
 ### Default Ports
 - T6 (Black Ops II): 21889 (UDP)
+### Directory Structure
+
+| Directory | Path | Description |
+|-----------|------|-------------|
+| **Mods** | `/opt/T6Server/Plutonium/storage/t6/mods/` | Custom game modifications |
+| **Config - Multiplayer** | `/opt/T6Server/Server/Multiplayer/main/configs/` | Multiplayer configuration files |
+| **Config - Zombie** | `/opt/T6Server/Server/Zombie/main/configs/` | Zombie mode configuration files |
+| **Logs** | `/opt/T6Server/Plutonium/storage/t6/logs/` | Server log files |
+| **Stats** | `/opt/T6Server/Plutonium/storage/t6/stats/` | Player statistics |
+| **Playlists** | `/opt/T6Server/Plutonium/storage/t6/playlists/` | Custom game playlists |
+| **Game Settings** | `/opt/T6Server/Plutonium/storage/t6/gamesettings/` | Game mode settings |
+| **Player Data** | `/opt/T6Server/Plutonium/storage/t6/players/` | Player-specific data |
+| **Scripts** | `/opt/T6Server/Plutonium/storage/t6/scripts/` | Custom game scripts |
+| **Maps - Multiplayer** | `/opt/T6Server/Server/Multiplayer/usermaps/` | Custom multiplayer maps |
+| **Maps - Zombie** | `/opt/T6Server/Server/Zombie/usermaps/` | Custom zombie maps |
+
+To change maps:
+1. Edit the appropriate configuration file:
+   - Multiplayer: `/opt/T6Server/Server/Multiplayer/main/configs/dedicated.cfg`
+   - Zombie: `/opt/T6Server/Server/Zombie/main/configs/dedicated_zm.cfg`
+
+### File Organization
+For proper server organization, place files in these specific directories:
+
+#### Custom Mods
+1. Place mod files in `/opt/T6Server/Plutonium/storage/t6/mods/`
+2. Enable mods by adding to server config:
+   ```cfg
+   set sv_enablemods "1"
+   set fs_game "mods/mod_name"
+   ```
+
+#### Custom Maps
+1. Place custom map files in their respective directories:
+   - Multiplayer maps: `/opt/T6Server/Server/Multiplayer/usermaps/`
+   - Zombie maps: `/opt/T6Server/Server/Zombie/usermaps/`
+
+2. Load custom maps by adding them to the map rotation in the config files:
+   ```cfg
+   // For Multiplayer (in dedicated.cfg)
+   sv_maprotation "map usermaps/custom_map_name map mp_nuketown_2020"
+   sv_maprotationcurrent ""
+   
+   // For Zombies (in dedicated_zm.cfg) 
+   sv_maprotation "map usermaps/custom_zombie_map"
+   sv_maprotationcurrent ""
+   ```
+
+3. Map file organization:
+   - Map files (.ff extension) go directly in the usermaps folder
+   - Supporting files like textures and models should be in a subfolder with the same name as the map
+   - Example structure:
+     ```
+     usermaps/
+     ├── custom_map.ff
+     └── custom_map/
+         ├── textures/
+         ├── models/
+         └── other assets/
+     ```
+
+4. Important notes:
+   - Maps must be in the correct format (.ff files)
+   - File permissions should be set to allow server read access
+   - Map names in rotation must exactly match the filename (without .ff)
+   - Restart server after adding new maps
+
 
 ## Launching the Server
 

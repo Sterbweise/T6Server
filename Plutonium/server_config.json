@@ -1,0 +1,55 @@
+{
+    "servers": [
+        {
+            "id": "t6mp_server_1",
+            "name": "Black Ops II Multiplayer Server 1",
+            "port": 28960,
+            "mode": "t6mp",
+            "mods": "",
+            "key": "YOURKEY",
+            "config": "dedicated.cfg",
+            "additional_params": {
+                "sv_network_protocol": 0,
+                "sv_maxclients": 0,
+                "sv_anticheat": 0,
+                "sv_pure": 0
+            },
+            "resource_limits": {
+                "max_cpu_percent": 70,
+                "max_memory_mb": 2048
+            }
+        },
+        {
+            "id": "t6zm_server_1",
+            "name": "Black Ops II Zombies Server 1",
+            "port": 28961,
+            "mode": "t6zm",
+            "mods": "",
+            "key": "YOURKEY",
+            "config": "dedicated_zm.cfg",
+            "additional_params": {
+                "sv_network_protocol": 0,
+                "sv_maxclients": 0,
+                "sv_anticheat": 0,
+                "sv_pure": 0
+            },
+            "resource_limits": {
+                "max_cpu_percent": 70,
+                "max_memory_mb": 2048
+            }
+        }
+    ],
+    "general_config": {
+        "server_name": "Black Ops II Server",
+        "server_description": "A dedicated server for Call of Duty: Black Ops II using Plutonium.",
+        "server_website": "https://example.com",
+        "executable_path": "./bin/plutonium-bootstrapper-win32.exe",
+        "install_dir": "/opt/T6Server/Plutonium"
+    },
+    "monitoring_config": {
+        "update_interval": 3,
+        "log_directory": "./monitoring_logs",
+        "max_log_files": 10,
+        "notification_email": "admin@example.com"
+    }
+} 
