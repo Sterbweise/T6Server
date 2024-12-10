@@ -36,7 +36,7 @@ installGameBinaries () {
         # Handle gamesettings defaults
         if [ -d "/tmp/T6ServerConfigs/localappdata/Plutonium/storage/t6/gamesettings/gamesettings_defaults (REFERENCE ONLY)" ]; then
             mkdir -p "$WORKDIR/Plutonium/storage/t6/gamesettings/default"
-            rsync -a --delete "/tmp/T6ServerConfigs/localappdata/Plutonium/storage/t6/gamesettings/gamesettings_defaults (REFERENCE ONLY)/MP/" "$WORKDIR/Plutonium/storage/t6/gamesettings/default"
+            rsync -a --delete "/tmp/T6ServerConfigs/localappdata/Plutonium/storage/t6/gamesettings/gamesettings_defaults (REFERENCE ONLY)/" "$WORKDIR/Plutonium/storage/t6/gamesettings/default"
         fi
 
         # Copy configuration files
