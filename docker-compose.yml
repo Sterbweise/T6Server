@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  t6server:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    container_name: plutonium-t6-server
+    restart: unless-stopped
+    ports:
+      - "21889:21889/udp"
+    environment:
+      - SERVER_NAME=DockerT6Server
+      - SERVER_KEY=your_plutonium_server_key
+      - SERVER_PORT=21889
+      - GAME_MODE=t6mp
+    volumes:
+      - ./server-data:/opt/T6Server/Plutonium/storage/t6
+    cap_add:
+      - NET_ADMIN
